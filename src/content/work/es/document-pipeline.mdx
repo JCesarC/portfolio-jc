@@ -1,0 +1,48 @@
+---
+title: Pipeline serverless de documentos hipotecarios
+summary: Servicios en AWS Lambda que llenan, comprimen, combinan y empaquetan documentos hipotecarios sensibles en descargas seguras.
+order: 3
+company: Chiplo / Docupass
+role: Único ingeniero — construcción y operación en producción
+period: TODO
+stack: [Node.js, TypeScript, AWS Lambda, S3]
+impact:
+  - value: '−40%'
+    label: tamaño de PDFs con el compresor propio
+  - value: Prefirmadas
+    label: URLs de S3, los archivos nunca son públicos
+---
+
+## Contexto
+
+Un expediente hipotecario es un paquete de formatos llenos, identificaciones, estados de cuenta y documentos firmados. Los asesores necesitan descargar el paquete completo listo para el banco, y esos archivos contienen datos financieros sensibles.
+
+## Qué construí
+
+Un conjunto de funciones Lambda, cada una con una sola responsabilidad, encadenadas en un pipeline:
+
+<Flow
+  steps={[
+    'Autollenado de formatos',
+    'Compresión de PDFs',
+    'Combinar documentos',
+    'Empaquetar ZIP',
+    'URL prefirmada de S3',
+  ]}
+/>
+
+- **Autollenado** de formatos hipotecarios con los datos del solicitante.
+- **Compresión** que reduce los PDFs hasta un 40%.
+- **Entrega segura** mediante URLs prefirmadas de S3 de corta duración; nada queda expuesto públicamente.
+
+## Decisiones clave
+
+<Todo>
+  ¿El autollenado usa las versiones del editor de plantillas? Si sí, enlázalo aquí. Por qué Lambda (costo, carga
+  variable), cómo manejaste timeouts/memoria con archivos grandes, cómo se reintentaban y reportaban las fallas
+  (notificaciones de error).
+</Todo>
+
+## Resultados
+
+<Todo>Volumen de paquetes generados, tiempo por paquete, incidentes o costo.</Todo>

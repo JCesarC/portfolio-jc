@@ -1,0 +1,50 @@
+---
+title: Editor de plantillas versionado para solicitudes hipotecarias
+summary: Una herramienta interna que permite al equipo remapear campos de los formatos de cada banco y publicar cambios en minutos, con rollback a cualquier versión anterior.
+order: 2
+company: Chiplo
+role: Único ingeniero — diseño e implementación
+period: TODO
+stack: [React, Node.js, MongoDB, AWS S3]
+impact:
+  - value: Minutos
+    label: para publicar un cambio, antes hasta un día completo
+  - value: 10+ / 5
+    label: plantillas de 5 bancos
+---
+
+## Contexto
+
+Cada banco tiene sus propios formatos de solicitud hipotecaria, y cambian. Mapear los datos de la solicitud a esos formatos era trabajo manual que podía tomar hasta un día por cambio.
+
+## Qué construí
+
+Un editor de plantillas donde el equipo remapea los campos de un formato y publica la nueva versión por su cuenta:
+
+<Flow
+  steps={[
+    'Subir formato del banco',
+    'Mapear campos',
+    'Publicar versión',
+    'Documentos autollenados',
+    'Rollback si hace falta',
+  ]}
+/>
+
+- **Versionado por defecto.** Cada publicación crea una versión inmutable, así que cualquier versión anterior se puede restaurar con seguridad.
+- **Publicación autoservicio.** El equipo remapea campos y publica desde el editor (React, Node.js, MongoDB, S3).
+
+## Decisiones clave
+
+<Todo>
+  Confirma cómo se reparte el almacenamiento entre MongoDB y S3. Por qué versiones inmutables en lugar de editar en
+  sitio; cómo los documentos ya generados siguen apuntando a la versión que usaron; cómo evitaste que un mapeo
+  incorrecto llegara a producción (vista previa, validación).
+</Todo>
+
+## Resultados
+
+- Los cambios a formatos salen en **minutos en lugar de hasta un día** de trabajo manual.
+- **10+ plantillas de 5 bancos** administradas en un solo lugar.
+
+<Todo>Algo más medible: cambios por mes, errores evitados.</Todo>

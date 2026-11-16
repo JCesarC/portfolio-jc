@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout locale="en" title="Not found">
+  <div class="container-page py-32 text-center">
+    <p class="eyebrow">404</p>
+    <h1 class="mt-4 font-serif text-4xl font-semibold">This page doesn’t exist.</h1>
+    <p class="mt-4 text-(--color-muted)">Esta página no existe.</p>
+    <p class="mt-8 flex justify-center gap-6">
+      <a href="/" class="text-(--color-accent) hover:underline">
+        Home
+      </a>
+      <a href="/es/" class="text-(--color-accent) hover:underline">
+        Inicio
+      </a>
+    </p>
+  </div>
+</BaseLayout>

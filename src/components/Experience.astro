@@ -1,0 +1,50 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import Tags from './Tags.astro';
+import { education, experience, formatPeriod } from '../data/profile';
+import { useTranslations, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<section id="experience" class="container-page scroll-mt-20 py-20" aria-labelledby="experience-title">
+  <SectionHeading id="experience" title={t('experience.title')} />
+  <ol class="space-y-14">
+    {experience.map((job) => (
+      <li class="grid gap-4 md:grid-cols-[13rem_1fr] md:gap-10">
+        <div class="text-sm text-(--color-muted)">
+          <p class="font-mono text-xs">{formatPeriod(job.start, job.end, locale, t('experience.present'))}</p>
+          <p class="mt-1">{job.location[locale]}</p>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold">
+            {job.role[locale]} <span class="text-(--color-muted)">· {job.company}</span>
+          </h3>
+          <p class="mt-2 leading-relaxed text-(--color-muted)">{job.context[locale]}</p>
+          {job.bullets[locale].length > 0 && (
+            <ul class="mt-4 space-y-2.5 leading-relaxed">
+              {job.bullets[locale].map((b) => (
+                <li class="relative pl-5 before:absolute before:top-[0.7em] before:left-0 before:size-1.5 before:rounded-full before:bg-(--color-accent)">
+                  {b}
+                </li>
+              ))}
+            </ul>
+          )}
+          <div class="mt-5">
+            <Tags items={job.stack} />
+          </div>
+        </div>
+      </li>
+    ))}
+    <li class="grid gap-4 md:grid-cols-[13rem_1fr] md:gap-10">
+      <p class="font-mono text-xs text-(--color-muted)">{education.period}</p>
+      <h3 class="text-lg font-semibold">
+        {education.degree[locale]} <span class="text-(--color-muted)">· {education.school}</span>
+      </h3>
+    </li>
+  </ol>
+</section>

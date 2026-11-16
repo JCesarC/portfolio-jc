@@ -1,0 +1,15 @@
+---
+interface Props {
+  items: string[];
+  label?: string;
+}
+const { items, label = 'Stack' } = Astro.props;
+---
+
+<ul class="flex flex-wrap gap-1.5" aria-label={label}>
+  {items.map((item) => (
+    <li class="rounded-full border border-(--color-line) px-2.5 py-0.5 font-mono text-[0.7rem] text-(--color-muted)">
+      {item}
+    </li>
+  ))}
+</ul>

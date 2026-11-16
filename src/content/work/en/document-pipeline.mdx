@@ -1,0 +1,39 @@
+---
+title: Serverless document pipeline for mortgage files
+summary: AWS Lambda services that fill, compress, merge and package sensitive mortgage documents into secure downloads.
+order: 3
+company: Chiplo / Docupass
+role: Sole engineer — built and operated in production
+period: TODO
+stack: [Node.js, TypeScript, AWS Lambda, S3]
+impact:
+  - value: '−40%'
+    label: PDF file size with the custom compressor
+  - value: Pre-signed
+    label: S3 URLs, so files are never public
+---
+
+## Context
+
+A mortgage file is a bundle of filled forms, IDs, statements and signed documents. Advisors need to download the complete, lender-ready package, and those files contain sensitive financial data.
+
+## What I built
+
+A set of Lambda functions that each do one job, chained into a pipeline:
+
+<Flow steps={['Auto-fill forms', 'Compress PDFs', 'Merge documents', 'Package ZIP', 'Pre-signed S3 URL']} />
+
+- **Auto-fill** of mortgage forms with the applicant’s data.
+- **Compression** reduces PDF size by up to 40%.
+- **Secure delivery** through short-lived pre-signed S3 URLs; nothing is exposed publicly.
+
+## Key decisions
+
+<Todo>
+  Does auto-fill use the template editor versions? If so, link it here. Why Lambda (cost, spiky load), how you handled
+  timeouts/memory on large files, how failures were retried and reported (error notifications).
+</Todo>
+
+## Results
+
+<Todo>Volume of packages generated, time per package, incidents or cost.</Todo>

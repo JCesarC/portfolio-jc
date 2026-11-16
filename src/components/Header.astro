@@ -1,0 +1,54 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+import { localePath, otherLocale, stripLocale, useTranslations, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const home = localePath(locale, '/');
+const other = otherLocale(locale);
+const switchHref = localePath(other, stripLocale(Astro.url.pathname));
+const nav = [
+  { href: `${home}#work`, label: t('nav.work') },
+  { href: `${home}#experience`, label: t('nav.experience') },
+  { href: `${home}#skills`, label: t('nav.skills') },
+  { href: `${home}#contact`, label: t('nav.contact') },
+];
+---
+
+<header class="sticky top-0 z-40 border-b border-(--color-line)/70 bg-(--color-bg)/85 backdrop-blur">
+  <div class="container-page flex h-16 items-center justify-between gap-4">
+    <a href={home} class="flex items-center gap-2 font-serif text-lg font-semibold tracking-tight" aria-label="Home">
+      <span class="grid size-8 place-items-center rounded-full bg-(--color-ink) font-sans text-xs font-bold text-(--color-bg)">
+        JC
+      </span>
+      <span class="hidden sm:inline">Julio Cantún</span>
+    </a>
+    <nav aria-label="Main" class="hidden md:block">
+      <ul class="flex items-center gap-6 text-sm text-(--color-muted)">
+        {nav.map((item) => (
+          <li>
+            <a href={item.href} class="transition-colors hover:text-(--color-ink)">
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <div class="flex items-center gap-1">
+      <a
+        href={switchHref}
+        hreflang={other}
+        lang={other}
+        class="rounded-md px-2.5 py-1.5 font-mono text-xs uppercase tracking-wider text-(--color-muted) transition-colors hover:bg-(--color-accent-soft) hover:text-(--color-ink)"
+        title={t('lang.switch')}
+      >
+        <span aria-hidden="true">{other}</span>
+        <span class="sr-only">{t('lang.switch')}</span>
+      </a>
+      <ThemeToggle label={t('theme.toggle')} />
+    </div>
+  </div>
+</header>

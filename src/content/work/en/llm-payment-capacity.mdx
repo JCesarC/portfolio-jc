@@ -1,0 +1,52 @@
+---
+title: LLM-powered payment-capacity assessment
+summary: Turning uploaded bank statements into an explainable estimate of how much a mortgage applicant can afford, using GPT-4 inside a policy-driven pipeline.
+order: 1
+company: Chiplo
+role: Sole engineer — design, implementation and production support
+period: TODO
+stack: [Python, GPT-4, AWS Lambda, Next.js]
+impact:
+  - value: '40%'
+    label: max debt-to-income ratio used for the estimate
+  - value: Prod
+    label: shipped to real mortgage applicants
+---
+
+## Context
+
+Chiplo helps real-estate agents and brokers originate mortgages. Before a file reaches a lender, an advisor has to estimate whether the applicant can afford the payment based on their bank statements.
+
+<Todo>How long did a manual review take, and how many applications per month went through this step?</Todo>
+
+## What I built
+
+A pipeline that reads the applicant's uploaded bank statements and produces a payment-capacity estimate with a written justification an advisor can check:
+
+<Flow
+  steps={[
+    'Bank statements uploaded',
+    'Income categorized (GPT-4)',
+    'Credit policy by employment type',
+    'Anomalous deposits excluded',
+    'Capacity vs. 40% DTI',
+    'Reasoning shown in Next.js',
+  ]}
+/>
+
+- **Income categorization.** GPT-4 categorizes the income found in each uploaded statement.
+- **Credit policy by employment type.** Different rules apply depending on how the applicant earns their income.
+- **Anomaly exclusion.** Anomalous deposits are excluded so they do not inflate the estimate.
+- **Explainability.** Every estimate ships with a reasoning summary in the Next.js app, so advisors can see _why_ and override when needed.
+
+## Key decisions
+
+<Todo>
+  Two or three trade-offs: which steps are deterministic code vs. model output, why GPT-4 and not rules/OCR alone, how
+  you validated accuracy (sample of reviewed files, agreement with advisors), how you handled PII and model failures,
+  cost per assessment.
+</Todo>
+
+## Results
+
+<Todo>Time saved per application, number of assessments in production, accuracy vs. manual review.</Todo>

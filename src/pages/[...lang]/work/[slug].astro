@@ -1,0 +1,100 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Flow from '../../../components/Flow.astro';
+import Todo from '../../../components/Todo.astro';
+import Tags from '../../../components/Tags.astro';
+import Video from '../../../components/Video.astro';
+import { defaultLocale, localePath, locales, useTranslations, type Locale } from '../../../i18n/ui';
+import { getWork, slugOf } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const locale of locales) {
+    const work = await getWork(locale);
+    for (const [i, entry] of work.entries()) {
+      paths.push({
+        params: { lang: locale === defaultLocale ? undefined : locale, slug: slugOf(entry) },
+        props: { locale, entry, next: work[(i + 1) % work.length] },
+      });
+    }
+  }
+  return paths;
+}
+
+const { locale, entry, next } = Astro.props as {
+  locale: Locale;
+  entry: Awaited<ReturnType<typeof getWork>>[number];
+  next: Awaited<ReturnType<typeof getWork>>[number];
+};
+const t = useTranslations(locale);
+const { Content } = await render(entry);
+const { title, summary, role, period, stack, impact, video, poster, company } = entry.data;
+const showPeriod = period !== 'TODO' || import.meta.env.DEV;
+---
+
+<BaseLayout locale={locale} title={title} description={summary}>
+  <article class="container-page pt-12 pb-8">
+    <a href={`${localePath(locale, '/')}#work`} class="text-sm text-(--color-muted) hover:text-(--color-ink)">
+      ← {t('case.back')}
+    </a>
+
+    <header class="mt-8 max-w-3xl">
+      <p class="eyebrow">{company}</p>
+      <h1 class="mt-4 font-serif text-4xl leading-tight font-semibold tracking-tight text-balance sm:text-5xl">
+        {title}
+      </h1>
+      <p class="mt-5 text-lg leading-relaxed text-(--color-muted)">{summary}</p>
+    </header>
+
+    <dl class="mt-10 grid gap-6 border-y border-(--color-line) py-6 text-sm sm:grid-cols-3">
+      <div>
+        <dt class="eyebrow">{t('case.role')}</dt>
+        <dd class="mt-2">{role}</dd>
+      </div>
+      {showPeriod && (
+        <div>
+          <dt class="eyebrow">{t('case.period')}</dt>
+          <dd class="mt-2">{period}</dd>
+        </div>
+      )}
+      <div>
+        <dt class="eyebrow">{t('case.stack')}</dt>
+        <dd class="mt-2">
+          <Tags items={stack} />
+        </dd>
+      </div>
+    </dl>
+
+    <section aria-label={t('case.impact')} class="mt-10 grid gap-6 sm:grid-cols-3">
+      {impact.map((i) => (
+        <div class="rounded-xl bg-(--color-accent-soft) p-5">
+          <p class="font-serif text-3xl font-semibold text-(--color-accent)">{i.value}</p>
+          <p class="mt-1 text-sm text-(--color-muted)">{i.label}</p>
+        </div>
+      ))}
+    </section>
+
+    {video && (
+      <div class="mt-10">
+        <Video src={video} poster={poster} label={`${t('video.label')}: ${title}`} />
+      </div>
+    )}
+
+    <div class="prose-case prose prose-lg mt-12 max-w-3xl">
+      <Content components={{ Flow, Todo }} />
+    </div>
+
+    {next && slugOf(next) !== slugOf(entry) && (
+      <nav class="mt-16 border-t border-(--color-line) pt-8" aria-label={t('case.next')}>
+        <p class="eyebrow">{t('case.next')}</p>
+        <a
+          href={localePath(locale, `/work/${slugOf(next)}/`)}
+          class="mt-2 inline-block font-serif text-2xl font-semibold hover:text-(--color-accent)"
+        >
+          {next.data.title} →
+        </a>
+      </nav>
+    )}
+  </article>
+</BaseLayout>

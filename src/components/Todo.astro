@@ -1,0 +1,14 @@
+---
+/**
+ * Placeholder for content Julio still has to write.
+ * Visible in `astro dev`, removed from production builds. List them with `npm run todos`.
+ */
+const show = import.meta.env.DEV;
+---
+
+{show && (
+  <aside class="not-prose my-4 rounded-lg border border-dashed border-amber-500 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:bg-amber-950/40 dark:text-amber-200">
+    <strong class="font-mono text-xs uppercase tracking-wider">TODO · </strong>
+    <slot />
+  </aside>
+)}

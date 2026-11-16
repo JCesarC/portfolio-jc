@@ -1,0 +1,52 @@
+---
+title: Evaluación de capacidad de pago con LLMs
+summary: Convertir estados de cuenta en una estimación explicable de cuánto puede pagar un solicitante de hipoteca, usando GPT-4 dentro de un pipeline guiado por políticas de crédito.
+order: 1
+company: Chiplo
+role: Único ingeniero — diseño, implementación y soporte en producción
+period: TODO
+stack: [Python, GPT-4, AWS Lambda, Next.js]
+impact:
+  - value: '40%'
+    label: tope de relación deuda/ingreso usado en la estimación
+  - value: Prod
+    label: en producción con solicitantes reales
+---
+
+## Contexto
+
+Chiplo ayuda a agentes inmobiliarios y brokers a originar hipotecas. Antes de que un expediente llegue al banco, un asesor tiene que estimar si el solicitante puede pagar la mensualidad a partir de sus estados de cuenta.
+
+<Todo>¿Cuánto tardaba una revisión manual y cuántas solicitudes al mes pasaban por este paso?</Todo>
+
+## Qué construí
+
+Un pipeline que lee los estados de cuenta del solicitante y genera una estimación de capacidad de pago con una justificación escrita que el asesor puede revisar:
+
+<Flow
+  steps={[
+    'Estados de cuenta cargados',
+    'Ingresos categorizados (GPT-4)',
+    'Política de crédito por tipo de empleo',
+    'Depósitos anómalos excluidos',
+    'Capacidad vs. 40% DTI',
+    'Razonamiento en Next.js',
+  ]}
+/>
+
+- **Categorización de ingresos.** GPT-4 categoriza los ingresos de cada estado de cuenta cargado.
+- **Política de crédito por tipo de empleo.** Se aplican reglas distintas según cómo obtiene sus ingresos el solicitante.
+- **Exclusión de anomalías.** Los depósitos anómalos se excluyen para que no inflen la estimación.
+- **Explicabilidad.** Cada estimación incluye un resumen del razonamiento en la app de Next.js, para que el asesor vea _por qué_ y pueda corregir cuando haga falta.
+
+## Decisiones clave
+
+<Todo>
+  Dos o tres trade-offs: qué pasos son código determinista y cuáles salida del modelo, por qué GPT-4 y no solo
+  reglas/OCR, cómo validaste la precisión (muestra de expedientes revisados, concordancia con asesores), cómo manejaste
+  datos personales y fallas del modelo, costo por evaluación.
+</Todo>
+
+## Resultados
+
+<Todo>Tiempo ahorrado por solicitud, número de evaluaciones en producción, precisión frente a la revisión manual.</Todo>

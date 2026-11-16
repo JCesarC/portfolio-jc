@@ -1,0 +1,50 @@
+---
+title: Versioned template editor for mortgage forms
+summary: An internal tool that lets the team remap lender form fields and publish changes in minutes, with rollback to any earlier version.
+order: 2
+company: Chiplo
+role: Sole engineer — design and implementation
+period: TODO
+stack: [React, Node.js, MongoDB, AWS S3]
+impact:
+  - value: Minutes
+    label: to publish a form change, down from up to a full day
+  - value: 10+ / 5
+    label: templates across 5 lenders
+---
+
+## Context
+
+Each lender has its own mortgage application forms, and they change. Mapping application data into those forms was manual work that could take up to a full day per change.
+
+## What I built
+
+A template editor where the team remaps data fields on a form and publishes the new version themselves:
+
+<Flow
+  steps={[
+    'Upload lender form',
+    'Map data fields',
+    'Publish new version',
+    'Documents auto-filled',
+    'Roll back if needed',
+  ]}
+/>
+
+- **Versioning by default.** Every publish creates a new immutable version, so any earlier version can be restored safely.
+- **Self-service publishing.** The team remaps fields and publishes from the editor (React, Node.js, MongoDB, S3).
+
+## Key decisions
+
+<Todo>
+  Confirm how storage is split between MongoDB and S3. Why immutable versions instead of edits in place; how documents
+  already generated keep pointing to the version they used; how you prevented a bad mapping from reaching production
+  (preview, validation).
+</Todo>
+
+## Results
+
+- Form changes go live in **minutes instead of up to a full day** of manual work.
+- **10+ templates across 5 lenders** managed in one place.
+
+<Todo>Anything else measurable: number of changes per month, errors avoided.</Todo>

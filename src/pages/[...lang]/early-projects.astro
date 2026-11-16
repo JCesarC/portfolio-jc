@@ -1,0 +1,57 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Tags from '../../components/Tags.astro';
+import Video from '../../components/Video.astro';
+import { langPaths, localePath, useTranslations, type Locale } from '../../i18n/ui';
+import { getArchive } from '../../lib/content';
+
+export const getStaticPaths = langPaths;
+
+const { locale } = Astro.props as { locale: Locale };
+const t = useTranslations(locale);
+const projects = await Promise.all(
+  (await getArchive(locale)).map(async (entry) => ({ entry, Content: (await render(entry)).Content })),
+);
+---
+
+<BaseLayout locale={locale} title={t('archive.title')} description={t('archive.lead')}>
+  <div class="container-page pt-12">
+    <a href={localePath(locale, '/')} class="text-sm text-(--color-muted) hover:text-(--color-ink)">
+      ← {t('archive.back')}
+    </a>
+    <h1 class="mt-8 font-serif text-4xl font-semibold tracking-tight sm:text-5xl">{t('archive.title')}</h1>
+    <p class="mt-4 max-w-2xl text-lg text-(--color-muted)">{t('archive.lead')}</p>
+
+    <div class="mt-14 space-y-16">
+      {projects.map(({ entry, Content }) => (
+        <article class="grid gap-6 md:grid-cols-2 md:gap-10" aria-labelledby={`p-${entry.id}`}>
+          <div>
+            <p class="eyebrow">{[entry.data.kind, entry.data.year].filter(Boolean).join(' · ')}</p>
+            <h2 id={`p-${entry.id}`} class="mt-3 font-serif text-2xl font-semibold">
+              {entry.data.title}
+            </h2>
+            <div class="mt-3 leading-relaxed text-(--color-muted)">
+              <Content />
+            </div>
+            <div class="mt-5">
+              <Tags items={entry.data.stack} />
+            </div>
+            {entry.data.repos.length > 0 && (
+              <ul class="mt-5 flex flex-wrap gap-4 text-sm">
+                {entry.data.repos.map((r) => (
+                  <li>
+                    <a href={r.url} class="text-(--color-accent) underline-offset-4 hover:underline">
+                      {r.label} ↗
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          {entry.data.video && <Video src={entry.data.video} label={`${t('video.label')}: ${entry.data.title}`} />}
+        </article>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

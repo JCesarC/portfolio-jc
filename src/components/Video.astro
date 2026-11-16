@@ -1,0 +1,30 @@
+---
+/**
+ * Demo video served from object storage (S3 + CloudFront).
+ * Set PUBLIC_MEDIA_BASE_URL; when it is missing the video is not rendered.
+ */
+interface Props {
+  src: string;
+  poster?: string;
+  label: string;
+}
+const { src, poster, label } = Astro.props;
+const base = import.meta.env.PUBLIC_MEDIA_BASE_URL?.replace(/\/$/, '');
+const url = (p: string) => `${base}/${p.replace(/^\//, '')}`;
+---
+
+{base && (
+  <figure class="not-prose overflow-hidden rounded-xl border border-(--color-line) bg-(--color-surface)">
+    <video
+      class="aspect-video w-full bg-black"
+      controls
+      muted
+      playsinline
+      preload="none"
+      poster={poster ? url(poster) : undefined}
+      aria-label={label}
+    >
+      <source src={url(src)} type={src.endsWith('.webm') ? 'video/webm' : 'video/mp4'} />
+    </video>
+  </figure>
+)}
