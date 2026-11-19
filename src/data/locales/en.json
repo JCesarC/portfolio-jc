@@ -25,7 +25,7 @@
     "chiplo": {
       "role": "Full Stack Developer",
       "location": "Remote",
-      "context": "Mortgage fintech: Chiplo (mortgage origination for real-estate agents and brokers) and Docupass (document collection and e-signature for enterprise clients). Sole engineer for ~2 years after team downsizing, owning both platforms end-to-end: features, bug fixes, releases and production support.",
+      "context": "Mortgage fintech with two products: Chiplo (mortgage origination for real-estate agents and brokers) and Docupass (document collection and e-signature). Sole engineer for ~2 years after a team downsizing, owning both end-to-end, from features to production support.",
       "bullets": [
         {
           "caseStudy": "llm-payment-capacity",
@@ -81,8 +81,7 @@
     "experience.present": "Present",
     "experience.key": "Key projects",
     "experience.more": "Also in this role",
-    "experience.read": "Case study",
-    "experience.cases.note": "Products belong to the company; the write-ups cover my part. No client data is shown.",
+    "case.note": "Products belong to the company; the write-ups cover my part. No client data is shown.",
     "projects.title": "Projects",
     "projects.lead": "Personal projects I design, build and maintain on my own.",
     "projects.read": "Read more",

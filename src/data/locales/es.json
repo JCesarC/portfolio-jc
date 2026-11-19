@@ -25,7 +25,7 @@
     "chiplo": {
       "role": "Desarrollador Full Stack",
       "location": "Remoto",
-      "context": "Fintech hipotecaria: Chiplo (originación de hipotecas para agentes inmobiliarios y brokers) y Docupass (recolección de documentos y firma electrónica para clientes empresariales). Único ingeniero durante ~2 años tras una reducción de equipo, a cargo de ambas plataformas de punta a punta: funcionalidades, bugs, releases y soporte en producción.",
+      "context": "Fintech hipotecaria con dos productos: Chiplo (originación de hipotecas para agentes inmobiliarios y brokers) y Docupass (recolección de documentos y firma electrónica). Único ingeniero durante ~2 años tras una reducción de equipo, a cargo de ambos de punta a punta, desde funcionalidades hasta soporte en producción.",
       "bullets": [
         {
           "caseStudy": "llm-payment-capacity",
@@ -81,8 +81,7 @@
     "experience.present": "Actual",
     "experience.key": "Proyectos clave",
     "experience.more": "También en este rol",
-    "experience.read": "Caso de estudio",
-    "experience.cases.note": "Los productos son de la empresa; los textos cubren mi parte. No se muestran datos de clientes.",
+    "case.note": "Los productos son de la empresa; los textos cubren mi parte. No se muestran datos de clientes.",
     "projects.title": "Proyectos",
     "projects.lead": "Proyectos personales que diseño, construyo y mantengo por mi cuenta.",
     "projects.read": "Ver más",

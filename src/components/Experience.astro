@@ -28,43 +28,38 @@ const jobs = await getJobs(locale);
           <p class="mt-2 leading-relaxed text-(--color-muted)">{job.context}</p>
 
           {job.cases.length > 0 && (
-            <div class="mt-8">
+            <div class="mt-6">
               <h4 class="eyebrow">{t('experience.key')}</h4>
-              <ul class="mt-3 grid gap-3 sm:grid-cols-2">
-                {job.cases.map((entry, i) => (
-                  <li class={i === 0 && job.cases.length % 2 === 1 ? 'sm:col-span-2' : ''}>
+              <ul class="mt-3 divide-y divide-(--color-line) rounded-xl border border-(--color-line) bg-(--color-surface)">
+                {job.cases.map((entry) => (
+                  <li>
                     <a
                       href={localePath(locale, `/work/${slugOf(entry)}/`)}
-                      class="group flex h-full flex-col rounded-xl border border-(--color-line) bg-(--color-surface) p-5 transition-colors hover:border-(--color-accent)"
+                      class="group flex items-center gap-4 px-5 py-4 transition-colors first:rounded-t-xl last:rounded-b-xl hover:bg-(--color-accent-soft)"
                     >
-                      <span class="font-serif text-lg leading-snug font-semibold">{entry.data.title}</span>
-                      <span class="mt-2 text-sm leading-relaxed text-(--color-muted)">{entry.data.summary}</span>
-                      <span class="mt-4 flex flex-1 flex-wrap items-end justify-between gap-x-6 gap-y-3">
-                        <span class="flex flex-wrap gap-x-5 gap-y-1">
-                          {entry.data.impact.map((m) => (
-                            <span class="text-sm">
-                              <span class="font-semibold text-(--color-accent)">{m.value}</span>
-                              <span class="text-(--color-muted)"> {m.label}</span>
-                            </span>
-                          ))}
+                      <span class="min-w-0 flex-1">
+                        <span class="block font-serif leading-snug font-semibold group-hover:text-(--color-accent)">
+                          {entry.data.title}
                         </span>
-                        <span class="shrink-0 text-sm font-medium text-(--color-accent)">
-                          {t('experience.read')}{' '}
-                          <span aria-hidden="true" class="inline-block transition-transform group-hover:translate-x-1">
-                            →
-                          </span>
+                        <span class="mt-1 block text-sm leading-relaxed text-(--color-muted)">
+                          {entry.data.summary}
                         </span>
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        class="shrink-0 text-(--color-accent) transition-transform group-hover:translate-x-1"
+                      >
+                        →
                       </span>
                     </a>
                   </li>
                 ))}
               </ul>
-              <p class="mt-2 text-xs text-(--color-muted)">{t('experience.cases.note')}</p>
             </div>
           )}
 
           {job.bullets.length > 0 && (
-            <div class="mt-8">
+            <div class="mt-6">
               {job.cases.length > 0 && <h4 class="eyebrow">{t('experience.more')}</h4>}
               <ul class="mt-3 space-y-2.5 leading-relaxed">
                 {job.bullets.map((b) => (
