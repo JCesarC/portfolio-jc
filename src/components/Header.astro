@@ -11,8 +11,8 @@ const home = localePath(locale, '/');
 const other = otherLocale(locale);
 const switchHref = localePath(other, stripLocale(Astro.url.pathname));
 const nav = [
-  { href: `${home}#work`, label: t('nav.work') },
   { href: `${home}#experience`, label: t('nav.experience') },
+  { href: `${home}#projects`, label: t('nav.projects') },
   { href: `${home}#skills`, label: t('nav.skills') },
   { href: `${home}#contact`, label: t('nav.contact') },
 ];

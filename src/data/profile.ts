@@ -19,6 +19,12 @@ export const profile = {
     en: 'Campeche, Mexico · Remote',
     es: 'Campeche, México · Remoto',
   } satisfies L10n,
+  /** Short first-person pitch for the hero and meta description. The CV keeps the longer `summary`. */
+  intro: {
+    en: 'I build backend systems and LLM-powered features that hold up in production. For 4+ years I’ve shipped and run the platforms behind a mortgage fintech, including ~2 years as the only engineer on both of them.',
+    es: 'Construyo sistemas backend y funcionalidades con LLMs que se sostienen en producción. Durante más de 4 años desarrollé y operé las plataformas de una fintech hipotecaria, incluidos ~2 años como el único ingeniero a cargo de ambas.',
+  } satisfies L10n,
+  /** CV summary, kept in sync with the PDF. */
   summary: {
     en: 'Software engineer with 4+ years building production systems for a mortgage fintech, including ~2 years as the sole engineer owning two platforms end-to-end. I shipped an LLM-powered payment-capacity assessment to production and built the Node.js/TypeScript APIs and AWS Lambda services behind mortgage and document workflows that handle sensitive financial data.',
     es: 'Ingeniero de software con más de 4 años construyendo sistemas en producción para una fintech hipotecaria, incluidos ~2 años como único ingeniero a cargo de dos plataformas de punta a punta. Llevé a producción una evaluación de capacidad de pago con LLMs y construí las APIs en Node.js/TypeScript y los servicios en AWS Lambda detrás de flujos hipotecarios y documentales con datos financieros sensibles.',
@@ -59,6 +65,8 @@ export const profile = {
 };
 
 export type Job = {
+  /** Case studies in src/content/work reference this id in their `job` field. */
+  id: string;
   company: string;
   role: L10n;
   location: L10n;
@@ -71,6 +79,7 @@ export type Job = {
 
 export const experience: Job[] = [
   {
+    id: 'chiplo',
     company: 'Chiplo / Fintecimal',
     role: { en: 'Full Stack Developer', es: 'Desarrollador Full Stack' },
     location: { en: 'Remote', es: 'Remoto' },
@@ -112,6 +121,7 @@ export const experience: Job[] = [
     ],
   },
   {
+    id: 'freelance',
     company: 'Freelance',
     role: { en: 'Software Developer', es: 'Desarrollador de Software' },
     location: { en: 'Campeche, Mexico', es: 'Campeche, México' },

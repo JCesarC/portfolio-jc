@@ -1,0 +1,96 @@
+---
+/** Shared detail page body for professional case studies and personal projects. */
+import Flow from './Flow.astro';
+import Todo from './Todo.astro';
+import Tags from './Tags.astro';
+import Video from './Video.astro';
+import { useTranslations, type Locale } from '../i18n/ui';
+
+type Meta = { label: string; text?: string; tags?: string[] };
+type Link = { href: string; label: string };
+
+interface Props {
+  locale: Locale;
+  eyebrow: string;
+  title: string;
+  summary: string;
+  meta: Meta[];
+  impact: { value: string; label: string }[];
+  video?: string;
+  poster?: string;
+  links?: Link[];
+  back: Link;
+  next?: Link & { kicker: string };
+  Content: any;
+}
+
+const { locale, eyebrow, title, summary, meta, impact, video, poster, links = [], back, next, Content } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<article class="container-page pt-12 pb-8">
+  <a href={back.href} class="text-sm text-(--color-muted) hover:text-(--color-ink)">
+    ← {back.label}
+  </a>
+
+  <header class="mt-8 max-w-3xl">
+    <p class="eyebrow">{eyebrow}</p>
+    <h1 class="mt-4 font-serif text-4xl leading-tight font-semibold tracking-tight text-balance sm:text-5xl">
+      {title}
+    </h1>
+    <p class="mt-5 text-lg leading-relaxed text-(--color-muted)">{summary}</p>
+    {links.length > 0 && (
+      <ul class="mt-6 flex flex-wrap gap-3">
+        {links.map((l) => (
+          <li>
+            <a
+              href={l.href}
+              class="inline-flex rounded-lg border border-(--color-line) px-4 py-2 text-sm font-medium hover:bg-(--color-accent-soft)"
+            >
+              {l.label} ↗
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </header>
+
+  <dl class="mt-10 grid gap-6 border-y border-(--color-line) py-6 text-sm sm:grid-cols-3">
+    {meta.map((m) => (
+      <div>
+        <dt class="eyebrow">{m.label}</dt>
+        <dd class="mt-2">{m.tags ? <Tags items={m.tags} /> : m.text}</dd>
+      </div>
+    ))}
+  </dl>
+
+  {impact.length > 0 && (
+    <section aria-label={t('case.impact')} class="mt-10 grid gap-6 sm:grid-cols-3">
+      {impact.map((i) => (
+        <div class="rounded-xl bg-(--color-accent-soft) p-5">
+          <p class="font-serif text-3xl font-semibold text-(--color-accent)">{i.value}</p>
+          <p class="mt-1 text-sm text-(--color-muted)">{i.label}</p>
+        </div>
+      ))}
+    </section>
+  )}
+
+  {video && (
+    <div class="mt-10">
+      <Video src={video} poster={poster} label={`${t('video.label')}: ${title}`} />
+    </div>
+  )}
+
+  <div class="prose-case prose prose-lg mt-12 max-w-3xl">
+    <Content components={{ Flow, Todo }} />
+  </div>
+
+  {next && (
+    <nav class="mt-16 border-t border-(--color-line) pt-8" aria-label={next.kicker}>
+      <p class="eyebrow">{next.kicker}</p>
+      <a href={next.href} class="mt-2 inline-block font-serif text-2xl font-semibold hover:text-(--color-accent)">
+        {next.label} →
+      </a>
+    </nav>
+  )}
+</article>
