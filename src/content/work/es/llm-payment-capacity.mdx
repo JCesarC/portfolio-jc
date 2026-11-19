@@ -8,6 +8,8 @@ role: Único ingeniero — diseño, implementación y soporte en producción
 period: TODO
 stack: [Python, GPT-4, AWS Lambda, Next.js]
 impact:
+  - value: 1h+ → min
+    label: por evaluación (estimado, no medido formalmente)
   - value: '40%'
     label: tope de relación deuda/ingreso usado en la estimación
   - value: Prod
@@ -16,9 +18,7 @@ impact:
 
 ## Contexto
 
-Chiplo ayuda a agentes inmobiliarios y brokers a originar hipotecas. Antes de que un expediente llegue al banco, un asesor tiene que estimar si el solicitante puede pagar la mensualidad a partir de sus estados de cuenta.
-
-<Todo>¿Cuánto tardaba una revisión manual y cuántas solicitudes al mes pasaban por este paso?</Todo>
+Chiplo ayuda a agentes inmobiliarios y brokers a originar hipotecas. Antes de que un expediente llegue al banco, un asesor tiene que estimar si el solicitante puede pagar la mensualidad. Hecho a mano, eso implicaba revisar sus estados de cuenta, preguntarle por sus ingresos y hacer los cálculos: una hora o más por solicitante.
 
 ## Qué construí
 
@@ -42,12 +42,11 @@ Un pipeline que lee los estados de cuenta del solicitante y genera una estimaci�
 
 ## Decisiones clave
 
-<Todo>
-  Dos o tres trade-offs: qué pasos son código determinista y cuáles salida del modelo, por qué GPT-4 y no solo
-  reglas/OCR, cómo validaste la precisión (muestra de expedientes revisados, concordancia con asesores), cómo manejaste
-  datos personales y fallas del modelo, costo por evaluación.
-</Todo>
+- **Automatizar el criterio de los asesores, no inventar uno nuevo.** Las políticas que aplica el pipeline, desde cómo se revisan los ingresos hasta cómo se calcula la capacidad de pago, son las mismas que usaban los asesores en su revisión manual. El resultado se puede contrastar con lo que un asesor habría hecho a mano.
+- **Cada cifra sale de los estados de cuenta del solicitante.** La estimación se construye solo con los estados de cuenta cargados, y los depósitos anómalos se excluyen para que un depósito aislado no la infle.
+- **Un número solo no basta.** Cada evaluación incluye el razonamiento detrás de ella, visible en la app de Next.js, para que el asesor vea cómo se llegó a la cifra antes de usarla.
 
 ## Resultados
 
-<Todo>Tiempo ahorrado por solicitud, número de evaluaciones en producción, precisión frente a la revisión manual.</Todo>
+- **De una hora o más a minutos.** Una revisión que a un asesor le tomaba una hora o más ahora genera una estimación, con su razonamiento, en minutos. No se midió formalmente en su momento; es mi estimación del antes y el después.
+- **En producción** con solicitantes de hipoteca reales.
