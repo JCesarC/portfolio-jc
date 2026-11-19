@@ -73,11 +73,13 @@ const t = useTranslations(locale);
     )}
   </header>
 
-  <dl class="mt-10 grid gap-6 border-y border-(--color-line) py-6 text-sm sm:grid-cols-3">
+  <dl
+    class:list={['mt-10 grid gap-6 border-y border-(--color-line) py-6 text-sm', meta.length > 1 && 'sm:grid-cols-3']}
+  >
     {meta.map((m) => (
       <div>
         <dt class="eyebrow">{m.label}</dt>
-        <dd class="mt-2">{m.tags ? <Tags items={m.tags} /> : m.text}</dd>
+        <dd class="mt-2">{m.tags ? <Tags items={m.tags} size="md" /> : m.text}</dd>
       </div>
     ))}
   </dl>

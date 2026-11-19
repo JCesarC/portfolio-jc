@@ -15,8 +15,8 @@ const work = defineCollection({
     /** Must match an experience `id` in src/data/site.json. */
     job: z.string(),
     company: z.string(),
+    /** Short role, shown in the eyebrow (e.g. "Sole engineer"). */
     role: z.string(),
-    period: z.string(),
     stack: z.array(z.string()),
     /** Short, verifiable outcomes. Shown on the card and at the top of the case study. */
     impact: z.array(z.object({ value: z.string(), label: z.string() })).max(3),

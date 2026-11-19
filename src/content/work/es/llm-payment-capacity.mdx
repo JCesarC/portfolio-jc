@@ -4,16 +4,15 @@ summary: Convertir estados de cuenta en una estimación explicable de cuánto pu
 order: 1
 job: chiplo
 company: Chiplo
-role: Único ingeniero — diseño, implementación y soporte en producción
-period: TODO
+role: Único ingeniero
 stack: [Python, GPT-4, AWS Lambda, Next.js]
 impact:
   - value: 1h+ → min
     label: por evaluación (estimado, no medido formalmente)
   - value: '40%'
     label: tope de relación deuda/ingreso usado en la estimación
-  - value: Prod
-    label: en producción con solicitantes reales
+  - value: '100%'
+    label: de los expedientes de Chiplo mostraban la evaluación de forma automática
 ---
 
 ## Contexto
@@ -48,5 +47,5 @@ Un pipeline que lee los estados de cuenta del solicitante y genera una estimaci�
 
 ## Resultados
 
-- **De una hora o más a minutos.** Una revisión que a un asesor le tomaba una hora o más ahora genera una estimación, con su razonamiento, en minutos. No se midió formalmente en su momento; es mi estimación del antes y el después.
-- **En producción** con solicitantes de hipoteca reales.
+- **De una hora o más a minutos.** Con el pipeline, una revisión que a un asesor le tomaba una hora o más generaba una estimación, con su razonamiento, en minutos. No se midió formalmente en su momento; es mi estimación del antes y el después.
+- **Integrada en cada expediente.** La evaluación se ejecutaba en todos los expedientes de solicitantes de Chiplo, así que el asesor veía la capacidad de pago del solicitante y su razonamiento sin ningún paso manual.

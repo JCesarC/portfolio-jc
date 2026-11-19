@@ -3,6 +3,7 @@ import type { InferGetStaticPropsType } from 'astro';
 import { render } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import CaseStudy from '../../../components/CaseStudy.astro';
+import { site } from '../../../data';
 import { localePath, useTranslations } from '../../../i18n/ui';
 import { getWork, localizedEntryPaths, slugOf } from '../../../lib/content';
 
@@ -12,23 +13,19 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { locale, entry, next } = Astro.props;
 const t = useTranslations(locale);
 const { Content } = await render(entry);
-const { title, summary, role, period, stack, impact, video, poster, company } = entry.data;
-const showPeriod = period !== 'TODO' || import.meta.env.DEV;
-const meta = [
-  { label: t('case.role'), text: role },
-  ...(showPeriod ? [{ label: t('case.period'), text: period }] : []),
-  { label: t('case.stack'), tags: stack },
-];
+const { title, summary, role, stack, impact, video, poster, company, job } = entry.data;
+// The legal owner of the product, e.g. "Chiplo / Fintecimal" (the job is validated in content.config.ts).
+const owner = site.experience.find((e) => e.id === job)?.company ?? company;
 ---
 
 <BaseLayout locale={locale} title={title} description={summary}>
   <CaseStudy
     locale={locale}
-    eyebrow={`${t('case.eyebrow')} ${company}`}
+    eyebrow={`${t('case.eyebrow')} ${company} · ${role}`}
     title={title}
     summary={summary}
-    note={t('case.note')}
-    meta={meta}
+    note={t('case.note').replace('{company}', owner)}
+    meta={[{ label: t('case.stack'), tags: stack }]}
     impact={impact}
     video={video}
     poster={poster}
