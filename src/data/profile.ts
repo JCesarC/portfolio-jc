@@ -73,7 +73,11 @@ export type Job = {
   start: string; // YYYY-MM
   end: string | null; // null = present
   context: L10n;
-  bullets: Record<Locale, string[]>;
+  /**
+   * CV bullets. When `caseStudy` matches a published entry in src/content/work,
+   * the website shows that bullet as a "Key project" card instead of plain text (no repetition).
+   */
+  bullets: { text: L10n; caseStudy?: string }[];
   stack: string[];
 };
 
@@ -90,22 +94,41 @@ export const experience: Job[] = [
       en: 'Mortgage fintech: Chiplo (mortgage origination for real-estate agents and brokers) and Docupass (document collection and e-signature for enterprise clients). Sole engineer for ~2 years after team downsizing, owning both platforms end-to-end: features, bug fixes, releases and production support.',
       es: 'Fintech hipotecaria: Chiplo (originación de hipotecas para agentes inmobiliarios y brokers) y Docupass (recolección de documentos y firma electrónica para clientes empresariales). Único ingeniero durante ~2 años tras una reducción de equipo, a cargo de ambas plataformas de punta a punta: funcionalidades, bugs, releases y soporte en producción.',
     },
-    bullets: {
-      en: [
-        'Built and shipped an LLM-powered payment-capacity assessment for mortgage applicants (Python, AWS Lambda, GPT-4), with an explainable reasoning summary shown in a Next.js app.',
-        'Built a versioned template editor for mortgage application forms (10+ templates, 5 lenders): field remaps are published in minutes instead of up to a full day, with safe rollback to any earlier version.',
-        'Built and operated AWS Lambda services that auto-fill, compress, merge and package mortgage documents into secure ZIP downloads via pre-signed S3 URLs; the PDF compressor cuts file size by up to 40%.',
-        'Built Chiplo’s real-estate partner network: agency and agent registration, plus per-agency property projects whose data and documents advisors attach to each client’s mortgage file.',
-        'Maintained the core TypeScript/Express API (application workflows, e-signatures, credit-bureau checks, webhooks, error notifications) and replaced manual builds and deploys with GitHub Actions CI/CD across 10+ repos.',
-      ],
-      es: [
-        'Construí y llevé a producción una evaluación de capacidad de pago con LLMs para solicitantes de hipoteca (Python, AWS Lambda, GPT-4), con un resumen explicable del razonamiento en una app de Next.js.',
-        'Construí un editor de plantillas versionado para solicitudes hipotecarias (10+ plantillas, 5 bancos): los cambios de mapeo se publican en minutos en lugar de hasta un día completo, con rollback seguro a cualquier versión anterior.',
-        'Construí y operé servicios en AWS Lambda que llenan, comprimen, combinan y empaquetan documentos hipotecarios en ZIPs seguros mediante URLs prefirmadas de S3; el compresor de PDFs reduce el tamaño hasta un 40%.',
-        'Construí la red de socios inmobiliarios de Chiplo: registro de agencias y agentes, y proyectos de propiedades por agencia cuyos datos y documentos los asesores adjuntan al expediente hipotecario de cada cliente.',
-        'Mantuve la API principal en TypeScript/Express (flujos de solicitud, firma electrónica, consultas a buró de crédito, webhooks, notificaciones de error) y reemplacé builds y despliegues manuales con CI/CD en GitHub Actions en más de 10 repos.',
-      ],
-    },
+    bullets: [
+      {
+        caseStudy: 'llm-payment-capacity',
+        text: {
+          en: 'Built and shipped an LLM-powered payment-capacity assessment for mortgage applicants (Python, AWS Lambda, GPT-4), with an explainable reasoning summary shown in a Next.js app.',
+          es: 'Construí y llevé a producción una evaluación de capacidad de pago con LLMs para solicitantes de hipoteca (Python, AWS Lambda, GPT-4), con un resumen explicable del razonamiento en una app de Next.js.',
+        },
+      },
+      {
+        caseStudy: 'versioned-template-editor',
+        text: {
+          en: 'Built a versioned template editor for mortgage application forms (10+ templates, 5 lenders): field remaps are published in minutes instead of up to a full day, with safe rollback to any earlier version.',
+          es: 'Construí un editor de plantillas versionado para solicitudes hipotecarias (10+ plantillas, 5 bancos): los cambios de mapeo se publican en minutos en lugar de hasta un día completo, con rollback seguro a cualquier versión anterior.',
+        },
+      },
+      {
+        caseStudy: 'document-pipeline',
+        text: {
+          en: 'Built and operated AWS Lambda services that auto-fill, compress, merge and package mortgage documents into secure ZIP downloads via pre-signed S3 URLs; the PDF compressor cuts file size by up to 40%.',
+          es: 'Construí y operé servicios en AWS Lambda que llenan, comprimen, combinan y empaquetan documentos hipotecarios en ZIPs seguros mediante URLs prefirmadas de S3; el compresor de PDFs reduce el tamaño hasta un 40%.',
+        },
+      },
+      {
+        text: {
+          en: 'Built Chiplo’s real-estate partner network: agency and agent registration, plus per-agency property projects whose data and documents advisors attach to each client’s mortgage file.',
+          es: 'Construí la red de socios inmobiliarios de Chiplo: registro de agencias y agentes, y proyectos de propiedades por agencia cuyos datos y documentos los asesores adjuntan al expediente hipotecario de cada cliente.',
+        },
+      },
+      {
+        text: {
+          en: 'Maintained the core TypeScript/Express API (application workflows, e-signatures, credit-bureau checks, webhooks, error notifications) and replaced manual builds and deploys with GitHub Actions CI/CD across 10+ repos.',
+          es: 'Mantuve la API principal en TypeScript/Express (flujos de solicitud, firma electrónica, consultas a buró de crédito, webhooks, notificaciones de error) y reemplacé builds y despliegues manuales con CI/CD en GitHub Actions en más de 10 repos.',
+        },
+      },
+    ],
     stack: [
       'TypeScript',
       'Node.js',
@@ -131,19 +154,28 @@ export const experience: Job[] = [
       en: 'Designed and built an order management system for a local restaurant: per-table and per-customer orders, order status, and menu and inventory management.',
       es: 'Diseñé y construí un sistema de gestión de órdenes para un restaurante local: órdenes por mesa y por cliente, estatus de órdenes y gestión de menú e inventario.',
     },
-    bullets: { en: [], es: [] },
+    bullets: [],
     stack: ['Node.js', 'Express', 'PostgreSQL', 'Angular', 'TypeScript'],
   },
 ];
 
-export const education = {
-  degree: {
-    en: 'B.S. in Computer Systems Engineering',
-    es: 'Ingeniería en Sistemas Computacionales',
-  } satisfies L10n,
-  school: 'Instituto Tecnológico Superior de Escárcega',
-  period: '2018 – 2023',
+export type EducationItem = {
+  kind: 'degree' | 'certification' | 'course';
+  title: L10n;
+  org: string;
+  period: string;
+  url?: string;
 };
+
+/** Degree, certifications and courses, newest first. */
+export const education: EducationItem[] = [
+  {
+    kind: 'degree',
+    title: { en: 'B.S. in Computer Systems Engineering', es: 'Ingeniería en Sistemas Computacionales' },
+    org: 'Instituto Tecnológico Superior de Escárcega',
+    period: '2018 – 2023',
+  },
+];
 
 export const skills: { group: L10n; items: string[] }[] = [
   { group: { en: 'Languages', es: 'Lenguajes' }, items: ['TypeScript', 'JavaScript', 'Python', 'SQL'] },
