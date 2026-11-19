@@ -1,4 +1,5 @@
 ---
+import HeroArt from './HeroArt.astro';
 import { content, site } from '../data';
 import { useTranslations, type Locale } from '../i18n/ui';
 
@@ -14,32 +15,39 @@ const secondary = `${btn} border border-(--color-line) hover:bg-(--color-accent-
 ---
 
 <section class="container-page pt-16 pb-20 sm:pt-24 sm:pb-28" aria-labelledby="hero-title">
-  <p class="eyebrow">{site.focus}</p>
-  <h1
-    id="hero-title"
-    class="mt-5 font-serif text-4xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-6xl"
-  >
-    {site.name}
-  </h1>
-  <p class="mt-3 text-xl text-(--color-accent) sm:text-2xl">{profile.title}</p>
-  <p class="mt-6 max-w-2xl text-lg leading-relaxed text-pretty text-(--color-muted)">{profile.intro}</p>
-  <p class="mt-3 max-w-2xl leading-relaxed text-pretty text-(--color-muted)">{profile.now}</p>
+  <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_22rem] xl:grid-cols-[minmax(0,1fr)_26rem]">
+    <div>
+      <p class="eyebrow">{site.focus}</p>
+      <h1
+        id="hero-title"
+        class="mt-5 font-serif text-4xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-6xl"
+      >
+        {site.name}
+      </h1>
+      <p class="mt-3 text-xl text-(--color-accent) sm:text-2xl">{profile.title}</p>
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-pretty text-(--color-muted)">{profile.intro}</p>
+      <p class="mt-3 max-w-2xl leading-relaxed text-pretty text-(--color-muted)">{profile.now}</p>
 
-  <div class="mt-8 flex flex-wrap gap-3">
-    <a href={`mailto:${site.email}`} class={`${btn} bg-(--color-ink) text-(--color-bg) hover:opacity-90`}>
-      {t('hero.email')}
-    </a>
-    {cv && (
-      <a href={cv} class={secondary} download>
-        {t('hero.cv')}
-      </a>
-    )}
-    <a href={site.links.linkedin} rel="me" class={secondary}>
-      LinkedIn
-    </a>
-    <a href={site.links.github} rel="me" class={secondary}>
-      GitHub
-    </a>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href={`mailto:${site.email}`} class={`${btn} bg-(--color-ink) text-(--color-bg) hover:opacity-90`}>
+          {t('hero.email')}
+        </a>
+        {cv && (
+          <a href={cv} class={secondary} download>
+            {t('hero.cv')}
+          </a>
+        )}
+        <a href={site.links.linkedin} rel="me" class={secondary}>
+          LinkedIn
+        </a>
+        <a href={site.links.github} rel="me" class={secondary}>
+          GitHub
+        </a>
+      </div>
+    </div>
+    <div class="hidden lg:block">
+      <HeroArt locale={locale} />
+    </div>
   </div>
 
   <dl class="mt-14 grid gap-6 border-t border-(--color-line) pt-8 sm:grid-cols-3">

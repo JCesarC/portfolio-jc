@@ -2,9 +2,10 @@
   "profile": {
     "title": "Software Engineer — AI / LLM Applications",
     "location": "Campeche, Mexico · Remote",
-    "intro": "I build backend systems and LLM-powered features that hold up in production. For 4+ years I’ve shipped and run the platforms behind a mortgage fintech, including ~2 years as the only engineer on both of them.",
+    "description": "I build backend systems and LLM-powered features that hold up in production. For 4+ years I’ve shipped and run the platforms behind a mortgage fintech, including ~2 years as the only engineer on both of them.",
+    "intro": "Hi, welcome to my portfolio! I’m Julio, a software engineer who enjoys turning complicated processes into software that simply works. For 4+ years I built and ran the platforms of a mortgage fintech, two of those years as its only engineer, including an AI feature that reads bank statements to estimate how much an applicant can afford.",
     "summary": "Software engineer with 4+ years building production systems for a mortgage fintech, including ~2 years as the sole engineer owning two platforms end-to-end. I shipped an LLM-powered payment-capacity assessment to production and built the Node.js/TypeScript APIs and AWS Lambda services behind mortgage and document workflows that handle sensitive financial data.",
-    "now": "Currently building LLM applications with structured outputs, retrieval, tool calling and evaluation.",
+    "now": "These days I’m focused on AI applications: structured outputs, retrieval, tool calling and evaluation. Take a look around: my experience, the projects I’m building and the tools I work with.",
     "languages": "Spanish (native) · English (professional working proficiency)",
     "highlights": [
       {
@@ -77,6 +78,8 @@
     "lang.switch": "Ver en español",
     "hero.cv": "Download CV",
     "hero.email": "Email me",
+    "hero.screen.hello": "Hello, World!",
+    "hero.screen.name": "I'm JC.",
     "experience.title": "Experience",
     "experience.present": "Present",
     "experience.key": "Key projects",

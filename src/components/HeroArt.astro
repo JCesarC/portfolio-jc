@@ -1,0 +1,163 @@
+---
+/**
+ * Hero illustration (src/assets/hero.svg, inlined so CSS can theme it) with two animated overlays:
+ * a terminal that types a greeting on the laptop screen, and steam rising from the mug.
+ * Overlay positions are percentages of the SVG viewBox (24 100 976 752).
+ */
+import Illustration from '../assets/hero.svg';
+import { useTranslations, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+// Each line types one character per step; the next line starts when the previous one ends.
+const charTime = 0.07;
+let delay = 0.8;
+const lines = [t('hero.screen.hello'), t('hero.screen.name')].map((text) => {
+  const n = text.length + 2; // "> " prefix
+  const line = { text, n, delay, duration: n * charTime };
+  delay += line.duration + 0.35;
+  return line;
+});
+---
+
+<div class="hero-art relative" aria-hidden="true">
+  <Illustration class="block h-auto w-full" />
+
+  <div class="screen absolute font-mono">
+    {lines.map((l, i) => (
+      <div>
+        <span class="type" style={`--n: ${l.n}; --delay: ${l.delay}s; --duration: ${l.duration.toFixed(2)}s`}>
+          <span class="prompt">&gt;</span> {l.text}
+        </span>
+        {i === lines.length - 1 && <span class="cursor" style={`--delay: ${l.delay}s`} />}
+      </div>
+    ))}
+  </div>
+
+  <svg class="steam absolute" viewBox="0 0 110 100" fill="none">
+    <path d="M35 95c-10-14 10-22 0-38s8-24 2-40" />
+    <path d="M58 95c-10-14 10-22 0-38s8-24 2-40" />
+    <path d="M81 95c-10-14 10-22 0-38s8-24 2-40" />
+  </svg>
+</div>
+
+<style>
+  .hero-art {
+    container-type: inline-size;
+  }
+
+  /* Theme the inlined SVG: lighter outlines and a real shadow in dark mode. */
+  .hero-art :global(.floor) {
+    fill: var(--color-line);
+  }
+  /* The gap inside the mug handle shows the page background. */
+  .hero-art :global(.hole) {
+    fill: var(--color-bg);
+  }
+  :global(.dark) .hero-art :global(.ink) {
+    fill: #3b4a66;
+  }
+  :global(.dark) .hero-art :global(.floor) {
+    fill: #060a14;
+  }
+
+  .screen {
+    left: 26.74%;
+    top: 35.11%;
+    width: 46.52%;
+    height: 35.51%;
+    padding: 7% 8%;
+    font-size: 3.6cqw;
+    line-height: 1.7;
+    color: #f3ead8;
+  }
+  .type {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: top;
+    width: calc(var(--n) * 1ch);
+  }
+  .prompt {
+    color: #e4b861;
+  }
+  .cursor {
+    display: inline-block;
+    width: 0.55em;
+    height: 1.1em;
+    margin-left: 0.15em;
+    vertical-align: -0.2em;
+    background: #e4b861;
+  }
+
+  .steam {
+    left: 9.32%;
+    top: 47.21%;
+    width: 11.27%;
+    height: 13.3%;
+  }
+  .steam path {
+    stroke: var(--color-muted);
+    stroke-width: 5;
+    stroke-linecap: round;
+    opacity: 0.35;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .type {
+      width: 0;
+      animation: type var(--duration) steps(var(--n)) var(--delay) forwards;
+    }
+    .cursor {
+      animation:
+        show 0s var(--delay) both,
+        blink 1.1s steps(1) var(--delay) infinite;
+    }
+    .steam path {
+      opacity: 0;
+      animation: rise 3.6s ease-in-out infinite;
+    }
+    .steam path:nth-child(2) {
+      animation-delay: 1.2s;
+    }
+    .steam path:nth-child(3) {
+      animation-delay: 2.4s;
+    }
+  }
+
+  @keyframes type {
+    to {
+      width: calc(var(--n) * 1ch);
+    }
+  }
+  @keyframes show {
+    from {
+      visibility: hidden;
+    }
+    to {
+      visibility: visible;
+    }
+  }
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  @keyframes rise {
+    0% {
+      opacity: 0;
+      transform: translateY(12%);
+    }
+    40% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-18%);
+    }
+  }
+</style>
