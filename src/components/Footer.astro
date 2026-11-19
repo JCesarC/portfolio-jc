@@ -1,40 +1,33 @@
 ---
+import { site } from '../data';
 import { localePath, useTranslations, type Locale } from '../i18n/ui';
-import { profile } from '../data/profile';
 
 interface Props {
   locale: Locale;
 }
 const { locale } = Astro.props;
 const t = useTranslations(locale);
+const links = [
+  { href: localePath(locale, '/early-projects/'), label: t('footer.archive') },
+  { href: site.links.github, label: 'GitHub', rel: 'me' },
+  { href: site.links.linkedin, label: 'LinkedIn', rel: 'me' },
+  { href: site.links.source, label: t('footer.source') },
+];
 ---
 
 <footer class="mt-24 border-t border-(--color-line)">
   <div class="container-page flex flex-col gap-4 py-8 text-sm text-(--color-muted) sm:flex-row sm:items-center sm:justify-between">
     <p>
-      © {new Date().getFullYear()} {profile.name}. {t('footer.built')}
+      © {new Date().getFullYear()} {site.name}. {t('footer.built')}
     </p>
     <ul class="flex flex-wrap gap-x-5 gap-y-2">
-      <li>
-        <a class="hover:text-(--color-ink)" href={localePath(locale, '/early-projects/')}>
-          {t('footer.archive')}
-        </a>
-      </li>
-      <li>
-        <a class="hover:text-(--color-ink)" href={profile.links.github} rel="me">
-          GitHub
-        </a>
-      </li>
-      <li>
-        <a class="hover:text-(--color-ink)" href={profile.links.linkedin} rel="me">
-          LinkedIn
-        </a>
-      </li>
-      <li>
-        <a class="hover:text-(--color-ink)" href={profile.links.source}>
-          {t('footer.source')}
-        </a>
-      </li>
+      {links.map((l) => (
+        <li>
+          <a class="hover:text-(--color-ink)" href={l.href} rel={l.rel}>
+            {l.label}
+          </a>
+        </li>
+      ))}
     </ul>
   </div>
 </footer>

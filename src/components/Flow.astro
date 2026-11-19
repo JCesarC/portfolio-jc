@@ -1,16 +1,18 @@
 ---
 /** A numbered process diagram for case studies: one row on desktop (two for long flows), stacked on mobile. */
+import { localeFromPath, useTranslations } from '../i18n/ui';
 interface Props {
   steps: string[];
 }
 const { steps } = Astro.props;
+const t = useTranslations(localeFromPath(Astro.url.pathname));
 const cols = steps.length <= 5 ? steps.length : Math.ceil(steps.length / 2);
 ---
 
 <ol
   class="not-prose my-8 grid gap-2 sm:grid-cols-2 md:grid-cols-[repeat(var(--cols),minmax(0,1fr))]"
   style={`--cols: ${cols}`}
-  aria-label="Process"
+  aria-label={t('a11y.process')}
 >
   {steps.map((step, i) => (
     <li class="flex items-start gap-3 rounded-lg border border-(--color-line) bg-(--color-surface) px-3 py-2.5 text-sm leading-snug">

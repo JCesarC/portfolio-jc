@@ -1,5 +1,6 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
+import { site } from '../data';
 import { localePath, otherLocale, stripLocale, useTranslations, type Locale } from '../i18n/ui';
 
 interface Props {
@@ -10,6 +11,10 @@ const t = useTranslations(locale);
 const home = localePath(locale, '/');
 const other = otherLocale(locale);
 const switchHref = localePath(other, stripLocale(Astro.url.pathname));
+const initials = site.shortName
+  .split(' ')
+  .map((w) => w[0])
+  .join('');
 const nav = [
   { href: `${home}#experience`, label: t('nav.experience') },
   { href: `${home}#skills`, label: t('nav.skills') },
@@ -21,13 +26,17 @@ const nav = [
 
 <header class="sticky top-0 z-40 border-b border-(--color-line)/70 bg-(--color-bg)/85 backdrop-blur">
   <div class="container-page flex h-16 items-center justify-between gap-4">
-    <a href={home} class="flex items-center gap-2 font-serif text-lg font-semibold tracking-tight" aria-label="Home">
+    <a
+      href={home}
+      class="flex items-center gap-2 font-serif text-lg font-semibold tracking-tight"
+      aria-label={t('a11y.home')}
+    >
       <span class="grid size-8 place-items-center rounded-full bg-(--color-ink) font-sans text-xs font-bold text-(--color-bg)">
-        JC
+        {initials}
       </span>
-      <span class="hidden sm:inline">Julio Cantún</span>
+      <span class="hidden sm:inline">{site.shortName}</span>
     </a>
-    <nav aria-label="Main" class="hidden md:block">
+    <nav aria-label={t('a11y.mainNav')} class="hidden md:block">
       <ul class="flex items-center gap-6 text-sm text-(--color-muted)">
         {nav.map((item) => (
           <li>
@@ -43,7 +52,7 @@ const nav = [
         href={switchHref}
         hreflang={other}
         lang={other}
-        class="rounded-md px-2.5 py-1.5 font-mono text-xs uppercase tracking-wider text-(--color-muted) transition-colors hover:bg-(--color-accent-soft) hover:text-(--color-ink)"
+        class="rounded-md px-2.5 py-1.5 font-mono text-xs tracking-wider text-(--color-muted) uppercase transition-colors hover:bg-(--color-accent-soft) hover:text-(--color-ink)"
         title={t('lang.switch')}
       >
         <span aria-hidden="true">{other}</span>

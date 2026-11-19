@@ -1,4 +1,6 @@
 ---
+import { PUBLIC_MEDIA_BASE_URL } from 'astro:env/client';
+
 /**
  * Demo video served from object storage (S3 + CloudFront).
  * Set PUBLIC_MEDIA_BASE_URL; when it is missing the video is not rendered.
@@ -9,7 +11,7 @@ interface Props {
   label: string;
 }
 const { src, poster, label } = Astro.props;
-const base = import.meta.env.PUBLIC_MEDIA_BASE_URL?.replace(/\/$/, '');
+const base = PUBLIC_MEDIA_BASE_URL?.replace(/\/$/, '');
 const url = (p: string) => `${base}/${p.replace(/^\//, '')}`;
 ---
 

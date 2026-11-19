@@ -1,0 +1,80 @@
+{
+  "name": "Julio César Cantún Páez",
+  "shortName": "Julio Cantún",
+  "focus": "Node.js · TypeScript · Python · LLMs · AWS",
+  "email": "julio.jccp.1@gmail.com",
+  "links": {
+    "github": "https://github.com/JCesarC",
+    "linkedin": "https://www.linkedin.com/in/julio-cesar-c-p/",
+    "source": "https://github.com/JCesarC/portfolio"
+  },
+  "cv": {
+    "en": null,
+    "es": null
+  },
+  "experience": [
+    {
+      "id": "chiplo",
+      "company": "Chiplo / Fintecimal",
+      "start": "2022-05",
+      "end": "2026-11",
+      "stack": [
+        "TypeScript",
+        "Node.js",
+        "Express",
+        "Python",
+        "AWS Lambda",
+        "S3",
+        "MongoDB",
+        "PostgreSQL",
+        "React",
+        "Next.js",
+        "GitHub Actions"
+      ]
+    },
+    {
+      "id": "freelance",
+      "company": "Freelance",
+      "start": "2021-08",
+      "end": "2022-01",
+      "stack": ["Node.js", "Express", "PostgreSQL", "Angular", "TypeScript"]
+    }
+  ],
+  "education": [
+    {
+      "id": "bs-computer-systems",
+      "kind": "degree",
+      "org": "Instituto Tecnológico Superior de Escárcega",
+      "period": "2018 – 2023"
+    }
+  ],
+  "skills": [
+    {
+      "id": "languages",
+      "items": ["TypeScript", "JavaScript", "Python", "SQL"]
+    },
+    {
+      "id": "ai",
+      "items": [
+        "Claude API",
+        "OpenAI API",
+        "Multi-step LLM pipelines",
+        "Structured outputs",
+        "Prompt engineering",
+        "Evaluation"
+      ]
+    },
+    {
+      "id": "backend",
+      "items": ["Node.js", "Express", "Flask", "REST APIs", "Webhooks", "PostgreSQL", "MongoDB", "Redis"]
+    },
+    {
+      "id": "cloud",
+      "items": ["AWS Lambda", "S3", "API Gateway", "EC2", "Docker", "GitHub Actions", "Heroku"]
+    },
+    {
+      "id": "frontend",
+      "items": ["React", "Next.js", "Redux", "Material UI", "Jest", "Cypress", "React Testing Library"]
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import Flow from './Flow.astro';
 import Todo from './Todo.astro';
 import Tags from './Tags.astro';
 import Video from './Video.astro';
+import type { render } from 'astro:content';
 import { useTranslations, type Locale } from '../i18n/ui';
 
 type Meta = { label: string; text?: string; tags?: string[] };
@@ -21,7 +22,7 @@ interface Props {
   links?: Link[];
   back: Link;
   next?: Link & { kicker: string };
-  Content: any;
+  Content: Awaited<ReturnType<typeof render>>['Content'];
 }
 
 const { locale, eyebrow, title, summary, meta, impact, video, poster, links = [], back, next, Content } = Astro.props;

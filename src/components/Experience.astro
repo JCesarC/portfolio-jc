@@ -1,48 +1,38 @@
 ---
-import SectionHeading from './SectionHeading.astro';
+import Section from './Section.astro';
 import Tags from './Tags.astro';
-import { experience, formatPeriod } from '../data/profile';
 import { localePath, useTranslations, type Locale } from '../i18n/ui';
-import { getWork, slugOf } from '../lib/content';
+import { getJobs, slugOf } from '../lib/content';
+import { formatPeriod } from '../lib/format';
 
 interface Props {
   locale: Locale;
 }
 const { locale } = Astro.props;
 const t = useTranslations(locale);
-
-const jobs = await Promise.all(
-  experience.map(async (job) => {
-    const cases = await getWork(locale, job.id);
-    const published = new Set(cases.map(slugOf));
-    // Bullets that have a published case study are shown as cards, so they are not repeated as text.
-    const bullets = job.bullets.filter((b) => !b.caseStudy || !published.has(b.caseStudy)).map((b) => b.text[locale]);
-    return { job, cases, bullets };
-  }),
-);
+const jobs = await getJobs(locale);
 ---
 
-<section id="experience" class="container-page py-20" aria-labelledby="experience-title">
-  <SectionHeading id="experience" title={t('experience.title')} />
+<Section id="experience" title={t('experience.title')}>
   <ol class="space-y-16">
-    {jobs.map(({ job, cases, bullets }) => (
+    {jobs.map((job) => (
       <li class="grid gap-4 md:grid-cols-[13rem_1fr] md:gap-10">
         <div class="text-sm text-(--color-muted)">
           <p class="font-mono text-xs">{formatPeriod(job.start, job.end, locale, t('experience.present'))}</p>
-          <p class="mt-1">{job.location[locale]}</p>
+          <p class="mt-1">{job.location}</p>
         </div>
         <div class="min-w-0">
           <h3 class="text-lg font-semibold">
-            {job.role[locale]} <span class="text-(--color-muted)">· {job.company}</span>
+            {job.role} <span class="text-(--color-muted)">· {job.company}</span>
           </h3>
-          <p class="mt-2 leading-relaxed text-(--color-muted)">{job.context[locale]}</p>
+          <p class="mt-2 leading-relaxed text-(--color-muted)">{job.context}</p>
 
-          {cases.length > 0 && (
+          {job.cases.length > 0 && (
             <div class="mt-8">
               <h4 class="eyebrow">{t('experience.key')}</h4>
               <ul class="mt-3 grid gap-3 sm:grid-cols-2">
-                {cases.map((entry, i) => (
-                  <li class={i === 0 && cases.length % 2 === 1 ? 'sm:col-span-2' : ''}>
+                {job.cases.map((entry, i) => (
+                  <li class={i === 0 && job.cases.length % 2 === 1 ? 'sm:col-span-2' : ''}>
                     <a
                       href={localePath(locale, `/work/${slugOf(entry)}/`)}
                       class="group flex h-full flex-col rounded-xl border border-(--color-line) bg-(--color-surface) p-5 transition-colors hover:border-(--color-accent)"
@@ -73,11 +63,11 @@ const jobs = await Promise.all(
             </div>
           )}
 
-          {bullets.length > 0 && (
+          {job.bullets.length > 0 && (
             <div class="mt-8">
-              {cases.length > 0 && <h4 class="eyebrow">{t('experience.more')}</h4>}
+              {job.cases.length > 0 && <h4 class="eyebrow">{t('experience.more')}</h4>}
               <ul class="mt-3 space-y-2.5 leading-relaxed">
-                {bullets.map((b) => (
+                {job.bullets.map((b) => (
                   <li class="relative pl-5 before:absolute before:top-[0.7em] before:left-0 before:size-1.5 before:rounded-full before:bg-(--color-accent)">
                     {b}
                   </li>
@@ -93,4 +83,4 @@ const jobs = await Promise.all(
       </li>
     ))}
   </ol>
-</section>
+</Section>

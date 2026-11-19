@@ -12,7 +12,7 @@ const work = defineCollection({
     title: z.string(),
     summary: z.string(),
     order: z.number(),
-    /** Must match a Job `id` in src/data/profile.ts. */
+    /** Must match an experience `id` in src/data/site.json. */
     job: z.string(),
     company: z.string(),
     role: z.string(),

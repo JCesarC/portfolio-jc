@@ -1,0 +1,131 @@
+{
+  "profile": {
+    "title": "Ingeniero de Software — Aplicaciones de IA / LLM",
+    "location": "Campeche, México · Remoto",
+    "intro": "Construyo sistemas backend y funcionalidades con LLMs que se sostienen en producción. Durante más de 4 años desarrollé y operé las plataformas de una fintech hipotecaria, incluidos ~2 años como el único ingeniero a cargo de ambas.",
+    "summary": "Ingeniero de software con más de 4 años construyendo sistemas en producción para una fintech hipotecaria, incluidos ~2 años como único ingeniero a cargo de dos plataformas de punta a punta. Llevé a producción una evaluación de capacidad de pago con LLMs y construí las APIs en Node.js/TypeScript y los servicios en AWS Lambda detrás de flujos hipotecarios y documentales con datos financieros sensibles.",
+    "now": "Actualmente construyo aplicaciones con LLMs: salidas estructuradas, retrieval, tool calling y evaluación.",
+    "languages": "Español (nativo) · Inglés (competencia profesional)",
+    "highlights": [
+      {
+        "value": "4+",
+        "label": "años llevando código a producción"
+      },
+      {
+        "value": "~2",
+        "label": "años como único ingeniero de dos plataformas"
+      },
+      {
+        "value": "10+",
+        "label": "repos migrados a CI/CD con GitHub Actions"
+      }
+    ]
+  },
+  "experience": {
+    "chiplo": {
+      "role": "Desarrollador Full Stack",
+      "location": "Remoto",
+      "context": "Fintech hipotecaria: Chiplo (originación de hipotecas para agentes inmobiliarios y brokers) y Docupass (recolección de documentos y firma electrónica para clientes empresariales). Único ingeniero durante ~2 años tras una reducción de equipo, a cargo de ambas plataformas de punta a punta: funcionalidades, bugs, releases y soporte en producción.",
+      "bullets": [
+        {
+          "caseStudy": "llm-payment-capacity",
+          "text": "Construí y llevé a producción una evaluación de capacidad de pago con LLMs para solicitantes de hipoteca (Python, AWS Lambda, GPT-4), con un resumen explicable del razonamiento en una app de Next.js."
+        },
+        {
+          "caseStudy": "versioned-template-editor",
+          "text": "Construí un editor de plantillas versionado para solicitudes hipotecarias (10+ plantillas, 5 bancos): los cambios de mapeo se publican en minutos en lugar de hasta un día completo, con rollback seguro a cualquier versión anterior."
+        },
+        {
+          "caseStudy": "document-pipeline",
+          "text": "Construí y operé servicios en AWS Lambda que llenan, comprimen, combinan y empaquetan documentos hipotecarios en ZIPs seguros mediante URLs prefirmadas de S3; el compresor de PDFs reduce el tamaño hasta un 40%."
+        },
+        {
+          "text": "Construí la red de socios inmobiliarios de Chiplo: registro de agencias y agentes, y proyectos de propiedades por agencia cuyos datos y documentos los asesores adjuntan al expediente hipotecario de cada cliente."
+        },
+        {
+          "text": "Mantuve la API principal en TypeScript/Express (flujos de solicitud, firma electrónica, consultas a buró de crédito, webhooks, notificaciones de error) y reemplacé builds y despliegues manuales con CI/CD en GitHub Actions en más de 10 repos."
+        }
+      ]
+    },
+    "freelance": {
+      "role": "Desarrollador de Software",
+      "location": "Campeche, México",
+      "context": "Diseñé y construí un sistema de gestión de órdenes para un restaurante local: órdenes por mesa y por cliente, estatus de órdenes y gestión de menú e inventario.",
+      "bullets": []
+    }
+  },
+  "education": {
+    "bs-computer-systems": {
+      "title": "Ingeniería en Sistemas Computacionales"
+    }
+  },
+  "skills": {
+    "languages": "Lenguajes",
+    "ai": "IA / LLM",
+    "backend": "Backend y datos",
+    "cloud": "Cloud y DevOps",
+    "frontend": "Frontend y pruebas"
+  },
+  "ui": {
+    "nav.experience": "Experiencia",
+    "nav.skills": "Habilidades",
+    "nav.projects": "Proyectos",
+    "nav.education": "Formación",
+    "nav.contact": "Contacto",
+    "nav.skip": "Saltar al contenido",
+    "theme.toggle": "Cambiar tema de color",
+    "lang.switch": "View in English",
+    "hero.cv": "Descargar CV",
+    "hero.email": "Escríbeme",
+    "experience.title": "Experiencia",
+    "experience.present": "Actual",
+    "experience.key": "Proyectos clave",
+    "experience.more": "También en este rol",
+    "experience.read": "Caso de estudio",
+    "experience.cases.note": "Los productos son de la empresa; los textos cubren mi parte. No se muestran datos de clientes.",
+    "projects.title": "Proyectos",
+    "projects.lead": "Proyectos personales que diseño, construyo y mantengo por mi cuenta.",
+    "projects.read": "Ver más",
+    "projects.repo": "Código",
+    "projects.demo": "Demo",
+    "projects.status.building": "En desarrollo",
+    "projects.status.live": "En línea",
+    "projects.status.archived": "Archivado",
+    "projects.early.title": "Primeros proyectos",
+    "projects.early.lead": "Trabajo de la universidad y mis primeros freelance: apps en Angular, Node.js, Spring Boot y Android.",
+    "projects.early.cta": "Ver primeros proyectos",
+    "skills.title": "Habilidades",
+    "education.title": "Formación",
+    "education.kind.degree": "Licenciatura",
+    "education.kind.certification": "Certificación",
+    "education.kind.course": "Curso",
+    "contact.title": "Hablemos",
+    "contact.lead": "Abierto a roles remotos de ingeniería de software, especialmente backend y productos con LLMs. El correo es la forma más rápida de contactarme.",
+    "footer.archive": "Primeros proyectos",
+    "footer.source": "Código",
+    "footer.built": "Hecho con Astro.",
+    "case.eyebrow": "Trabajo en",
+    "case.back": "Volver a experiencia",
+    "case.role": "Rol",
+    "case.period": "Periodo",
+    "case.status": "Estado",
+    "case.stack": "Stack",
+    "case.impact": "Impacto",
+    "case.next": "Siguiente caso",
+    "project.eyebrow": "Proyecto personal",
+    "project.back": "Todos los proyectos",
+    "project.next": "Siguiente proyecto",
+    "archive.title": "Primeros proyectos",
+    "archive.lead": "Proyectos de la universidad y de mis primeros trabajos freelance, conservados como contexto. Para el trabajo actual, mira la experiencia y los proyectos en el inicio.",
+    "archive.back": "Volver al inicio",
+    "archive.repo": "Repositorio",
+    "video.label": "Video demo",
+    "a11y.home": "Inicio",
+    "a11y.mainNav": "Principal",
+    "a11y.process": "Proceso",
+    "a11y.stack": "Stack",
+    "notFound.title": "No encontrada",
+    "notFound.heading": "Esta página no existe.",
+    "notFound.home": "Inicio"
+  }
+}
