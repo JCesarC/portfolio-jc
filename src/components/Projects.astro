@@ -13,7 +13,7 @@ const t = useTranslations(locale);
 const projects = await getProjects(locale);
 ---
 
-<section id="projects" class="container-page scroll-mt-20 py-20" aria-labelledby="projects-title">
+<section id="projects" class="container-page py-20" aria-labelledby="projects-title">
   <SectionHeading id="projects" title={t('projects.title')} lead={t('projects.lead')} />
 
   {projects.length > 0 ? (

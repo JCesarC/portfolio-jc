@@ -10,7 +10,7 @@ const { locale } = Astro.props;
 const t = useTranslations(locale);
 ---
 
-<section id="skills" class="container-page scroll-mt-20 py-20" aria-labelledby="skills-title">
+<section id="skills" class="container-page py-20" aria-labelledby="skills-title">
   <SectionHeading id="skills" title={t('skills.title')} />
   <dl class="divide-y divide-(--color-line) border-y border-(--color-line)">
     {skills.map((s) => (
