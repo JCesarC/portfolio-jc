@@ -1,19 +1,26 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { localePath, locales, useTranslations } from '../i18n/ui';
+
+// A single static 404 serves every locale, so it shows the message in all of them.
+const [en, ...others] = locales.map((l) => ({ locale: l, t: useTranslations(l) }));
 ---
 
-<BaseLayout locale="en" title="Not found">
+<BaseLayout locale="en" title={en!.t('notFound.title')}>
   <div class="container-page py-32 text-center">
     <p class="eyebrow">404</p>
-    <h1 class="mt-4 font-serif text-4xl font-semibold">This page doesn’t exist.</h1>
-    <p class="mt-4 text-(--color-muted)">Esta página no existe.</p>
+    <h1 class="mt-4 font-serif text-4xl font-semibold">{en!.t('notFound.heading')}</h1>
+    {others.map(({ locale, t }) => (
+      <p class="mt-4 text-(--color-muted)" lang={locale}>
+        {t('notFound.heading')}
+      </p>
+    ))}
     <p class="mt-8 flex justify-center gap-6">
-      <a href="/" class="text-(--color-accent) hover:underline">
-        Home
-      </a>
-      <a href="/es/" class="text-(--color-accent) hover:underline">
-        Inicio
-      </a>
+      {[en!, ...others].map(({ locale, t }) => (
+        <a href={localePath(locale, '/')} class="text-(--color-accent) hover:underline" lang={locale}>
+          {t('notFound.home')}
+        </a>
+      ))}
     </p>
   </div>
 </BaseLayout>

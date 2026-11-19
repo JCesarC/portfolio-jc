@@ -1,0 +1,130 @@
+{
+  "profile": {
+    "title": "Software Engineer — AI / LLM Applications",
+    "location": "Campeche, Mexico · Remote",
+    "intro": "I build backend systems and LLM-powered features that hold up in production. For 4+ years I’ve shipped and run the platforms behind a mortgage fintech, including ~2 years as the only engineer on both of them.",
+    "summary": "Software engineer with 4+ years building production systems for a mortgage fintech, including ~2 years as the sole engineer owning two platforms end-to-end. I shipped an LLM-powered payment-capacity assessment to production and built the Node.js/TypeScript APIs and AWS Lambda services behind mortgage and document workflows that handle sensitive financial data.",
+    "now": "Currently building LLM applications with structured outputs, retrieval, tool calling and evaluation.",
+    "languages": "Spanish (native) · English (professional working proficiency)",
+    "highlights": [
+      {
+        "value": "4+",
+        "label": "years shipping to production"
+      },
+      {
+        "value": "~2",
+        "label": "years as sole engineer on two platforms"
+      },
+      {
+        "value": "10+",
+        "label": "repos moved to GitHub Actions CI/CD"
+      }
+    ]
+  },
+  "experience": {
+    "chiplo": {
+      "role": "Full Stack Developer",
+      "location": "Remote",
+      "context": "Mortgage fintech with two products: Chiplo (mortgage origination for real-estate agents and brokers) and Docupass (document collection and e-signature). Sole engineer for ~2 years after a team downsizing, owning both end-to-end, from features to production support.",
+      "bullets": [
+        {
+          "caseStudy": "llm-payment-capacity",
+          "text": "Built and shipped an LLM-powered payment-capacity assessment for mortgage applicants (Python, AWS Lambda, GPT-4), with an explainable reasoning summary shown in a Next.js app."
+        },
+        {
+          "caseStudy": "versioned-template-editor",
+          "text": "Built a versioned template editor for mortgage application forms (10+ templates, 5 lenders): field remaps are published in minutes instead of up to a full day, with safe rollback to any earlier version."
+        },
+        {
+          "caseStudy": "document-pipeline",
+          "text": "Built and operated AWS Lambda services that auto-fill, compress, merge and package mortgage documents into secure ZIP downloads via pre-signed S3 URLs; the PDF compressor cuts file size by up to 40%."
+        },
+        {
+          "text": "Built Chiplo’s real-estate partner network: agency and agent registration, plus per-agency property projects whose data and documents advisors attach to each client’s mortgage file."
+        },
+        {
+          "text": "Maintained the core TypeScript/Express API (application workflows, e-signatures, credit-bureau checks, webhooks, error notifications) and replaced manual builds and deploys with GitHub Actions CI/CD across 10+ repos."
+        }
+      ]
+    },
+    "freelance": {
+      "role": "Software Developer",
+      "location": "Campeche, Mexico",
+      "context": "Designed and built an order management system for a local restaurant: per-table and per-customer orders, order status, and menu and inventory management.",
+      "bullets": []
+    }
+  },
+  "education": {
+    "bs-computer-systems": {
+      "title": "B.S. in Computer Systems Engineering"
+    }
+  },
+  "skills": {
+    "languages": "Languages",
+    "ai": "AI / LLM",
+    "backend": "Backend & data",
+    "cloud": "Cloud & DevOps",
+    "frontend": "Frontend & testing"
+  },
+  "ui": {
+    "nav.experience": "Experience",
+    "nav.skills": "Skills",
+    "nav.projects": "Projects",
+    "nav.education": "Education",
+    "nav.contact": "Contact",
+    "nav.skip": "Skip to content",
+    "theme.toggle": "Toggle color theme",
+    "lang.switch": "Ver en español",
+    "hero.cv": "Download CV",
+    "hero.email": "Email me",
+    "experience.title": "Experience",
+    "experience.present": "Present",
+    "experience.key": "Key projects",
+    "experience.more": "Also in this role",
+    "case.note": "Products belong to the company; the write-ups cover my part. No client data is shown.",
+    "projects.title": "Projects",
+    "projects.lead": "Personal projects I design, build and maintain on my own.",
+    "projects.read": "Read more",
+    "projects.repo": "Code",
+    "projects.demo": "Live demo",
+    "projects.status.building": "In progress",
+    "projects.status.live": "Live",
+    "projects.status.archived": "Archived",
+    "projects.early.title": "Early projects",
+    "projects.early.lead": "University and first freelance work: Angular, Node.js, Spring Boot and Android apps.",
+    "projects.early.cta": "See early projects",
+    "skills.title": "Skills",
+    "education.title": "Education",
+    "education.kind.degree": "Degree",
+    "education.kind.certification": "Certification",
+    "education.kind.course": "Course",
+    "contact.title": "Let's talk",
+    "contact.lead": "Open to remote software engineering roles, especially backend and LLM-powered products. Email is the fastest way to reach me.",
+    "footer.archive": "Early projects",
+    "footer.source": "Source",
+    "footer.built": "Built with Astro.",
+    "case.eyebrow": "Work at",
+    "case.back": "Back to experience",
+    "case.role": "Role",
+    "case.period": "Period",
+    "case.status": "Status",
+    "case.stack": "Stack",
+    "case.impact": "Impact",
+    "case.next": "Next case study",
+    "project.eyebrow": "Personal project",
+    "project.back": "All projects",
+    "project.next": "Next project",
+    "archive.title": "Early projects",
+    "archive.lead": "University and early freelance work, kept for context. For current work, see the experience and projects on the home page.",
+    "archive.back": "Back to home",
+    "archive.repo": "Repository",
+    "video.label": "Demo video",
+    "a11y.home": "Home",
+    "a11y.mainNav": "Main",
+    "a11y.process": "Process",
+    "a11y.stack": "Stack",
+    "notFound.title": "Not found",
+    "notFound.heading": "This page doesn’t exist.",
+    "notFound.home": "Home"
+  }
+}

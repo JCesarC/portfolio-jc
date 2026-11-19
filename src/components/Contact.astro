@@ -1,5 +1,5 @@
 ---
-import { profile } from '../data/profile';
+import { content, site } from '../data';
 import { useTranslations, type Locale } from '../i18n/ui';
 
 interface Props {
@@ -9,30 +9,30 @@ const { locale } = Astro.props;
 const t = useTranslations(locale);
 ---
 
-<section id="contact" class="container-page scroll-mt-20 py-20" aria-labelledby="contact-title">
+<section id="contact" class="container-page py-20" aria-labelledby="contact-title">
   <div class="rounded-3xl bg-(--color-ink) px-6 py-14 text-(--color-bg) sm:px-12">
     <h2 id="contact-title" class="font-serif text-3xl font-semibold tracking-tight sm:text-5xl">
       {t('contact.title')}
     </h2>
     <p class="mt-4 max-w-xl opacity-80">{t('contact.lead')}</p>
     <a
-      href={`mailto:${profile.email}`}
+      href={`mailto:${site.email}`}
       class="mt-8 inline-block font-serif text-xl break-all underline decoration-(--color-accent) decoration-2 underline-offset-8 hover:decoration-4 sm:text-3xl"
     >
-      {profile.email}
+      {site.email}
     </a>
     <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm opacity-80">
       <li>
-        <a class="hover:opacity-100 hover:underline" href={profile.links.linkedin} rel="me">
+        <a class="hover:underline hover:opacity-100" href={site.links.linkedin} rel="me">
           LinkedIn
         </a>
       </li>
       <li>
-        <a class="hover:opacity-100 hover:underline" href={profile.links.github} rel="me">
+        <a class="hover:underline hover:opacity-100" href={site.links.github} rel="me">
           GitHub
         </a>
       </li>
-      <li>{profile.location[locale]}</li>
+      <li>{content(locale).profile.location}</li>
     </ul>
   </div>
 </section>

@@ -1,0 +1,36 @@
+---
+import Section from './Section.astro';
+import { educationItems } from '../data';
+import { useTranslations, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<Section id="education" title={t('education.title')}>
+  <ul class="divide-y divide-(--color-line) border-y border-(--color-line)">
+    {educationItems(locale).map((item) => (
+      <li class="grid gap-2 py-5 md:grid-cols-[13rem_1fr] md:gap-10">
+        <div>
+          <p class="font-mono text-xs text-(--color-muted)">{item.period}</p>
+          <p class="eyebrow mt-1">{t(`education.kind.${item.kind}`)}</p>
+        </div>
+        <div>
+          <h3 class="font-semibold">
+            {item.url ? (
+              <a href={item.url} class="hover:text-(--color-accent)">
+                {item.title} ↗
+              </a>
+            ) : (
+              item.title
+            )}
+          </h3>
+          <p class="mt-0.5 text-(--color-muted)">{item.org}</p>
+        </div>
+      </li>
+    ))}
+  </ul>
+</Section>

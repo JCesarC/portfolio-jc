@@ -1,27 +1,15 @@
 ---
+import type { InferGetStaticPropsType } from 'astro';
 import { render } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import CaseStudy from '../../../components/CaseStudy.astro';
-import { defaultLocale, localePath, locales, useTranslations, type Locale } from '../../../i18n/ui';
-import { getProjects, slugOf } from '../../../lib/content';
+import { localePath, useTranslations } from '../../../i18n/ui';
+import { getProjects, localizedEntryPaths, slugOf } from '../../../lib/content';
 
-type Project = Awaited<ReturnType<typeof getProjects>>[number];
+export const getStaticPaths = () => localizedEntryPaths(getProjects);
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-export async function getStaticPaths() {
-  const paths = [];
-  for (const locale of locales) {
-    const projects = await getProjects(locale);
-    for (const [i, entry] of projects.entries()) {
-      paths.push({
-        params: { lang: locale === defaultLocale ? undefined : locale, slug: slugOf(entry) },
-        props: { locale, entry, next: projects.length > 1 ? projects[(i + 1) % projects.length] : undefined },
-      });
-    }
-  }
-  return paths;
-}
-
-const { locale, entry, next } = Astro.props as { locale: Locale; entry: Project; next?: Project };
+const { locale, entry, next } = Astro.props;
 const t = useTranslations(locale);
 const { Content } = await render(entry);
 const { title, summary, status, stack, impact, video, poster, repo, demo } = entry.data;

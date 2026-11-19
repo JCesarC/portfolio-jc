@@ -16,13 +16,21 @@ Bilingual (English at `/`, Spanish at `/es/`), fully static, no client-side fram
 
 ```
 src/
-  data/profile.ts        # Single source for profile, experience, skills (mirrors the CV)
-  content/work/<lang>/   # Case studies (MDX). Same file name across languages.
-  content/archive/<lang>/# Early university/freelance projects
-  i18n/ui.ts             # UI strings + locale helpers
-  pages/[...lang]/       # One route file serves both locales
-  components/            # Flow diagram, Todo, Video, section components
+  data/site.json           # Language-neutral data: name, links, dates, stacks, skill items
+  data/locales/en.json     # Every English text: profile, experience, education, UI strings
+  data/locales/es.json     # Same keys in Spanish
+  data/index.ts            # Loads + validates the JSON (zod) and checks en/es parity
+  content/work/<lang>/     # Case studies from professional roles (MDX)
+  content/projects/<lang>/ # Personal projects (MDX)
+  content/archive/<lang>/  # Early university/freelance projects
+  i18n/ui.ts               # Locale helpers (paths, translations)
+  lib/                     # Content queries and formatting
+  pages/[...lang]/         # One route file serves both locales
+  components/
 ```
+
+To change text, edit the JSON or MDX files; no component code is involved. The build fails if a
+locale is missing a key, a job, a skill group, an education entry or a case-study translation.
 
 ## Commands
 

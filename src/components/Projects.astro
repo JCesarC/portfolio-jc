@@ -1,5 +1,5 @@
 ---
-import SectionHeading from './SectionHeading.astro';
+import Section from './Section.astro';
 import ProjectCard from './ProjectCard.astro';
 import Todo from './Todo.astro';
 import { localePath, useTranslations, type Locale } from '../i18n/ui';
@@ -13,9 +13,7 @@ const t = useTranslations(locale);
 const projects = await getProjects(locale);
 ---
 
-<section id="projects" class="container-page scroll-mt-20 py-20" aria-labelledby="projects-title">
-  <SectionHeading id="projects" title={t('projects.title')} lead={t('projects.lead')} />
-
+<Section id="projects" title={t('projects.title')} lead={t('projects.lead')}>
   {projects.length > 0 ? (
     <div class="grid gap-6 lg:grid-cols-2">
       {projects.map((entry, i) => (
@@ -43,4 +41,4 @@ const projects = await getProjects(locale);
       </span>
     </span>
   </a>
-</section>
+</Section>
