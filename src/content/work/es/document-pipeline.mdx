@@ -4,7 +4,9 @@ summary: Un compresor dedicado para PDFs hipotecarios de hasta 200 MB que reduce
 order: 3
 job: chiplo
 company: Chiplo / Docupass
-stack: [Node.js, TypeScript, AWS Lambda, S3]
+stack: [Node.js, TypeScript, AWS Lambda, S3, Redis]
+# TODO: medir el compresor con un PDF pesado real (p. ej. una escritura de 150 MB) y anotar el peso antes/después.
+# Un ejemplo medido ("150 MB → 85 MB") daría una tarjeta más fuerte que "Hasta 40%". Actualizar también en/.
 impact:
   - value: Hasta 200 MB
     label: por documento, como escrituras y regímenes de condominio
@@ -41,6 +43,7 @@ El compresor es una etapa de un conjunto más grande de funciones Lambda, cada u
 />
 
 - **Autollenado** de los formatos de cada banco con los datos del solicitante.
+- **Dividir cuando aún se requiere.** Algunos documentos de más de 50 MB debían subirse a portales de brokers que aceptan 20 MB como máximo, así que el pipeline los divide por rangos de páginas, definidos en la configuración, en partes que sí caben.
 - **Combinar y empaquetar** los documentos del cliente en un solo ZIP.
 - **Entrega segura** mediante URLs prefirmadas de S3 de corta duración; nada queda expuesto públicamente.
 
@@ -49,6 +52,7 @@ El compresor es una etapa de un conjunto más grande de funciones Lambda, cada u
 - **Un compresor dedicado a archivos pesados.** En lugar de forzar más el compresor general, construí un servicio aparte solo para los documentos que lo necesitan, sin cambiar el resto del pipeline.
 - **Legibilidad antes que compresión máxima.** Un archivo más ligero no sirve si ya no se puede leer una firma o una cifra de una escritura, así que la configuración prioriza la calidad y acepta una reducción menos agresiva.
 - **Comprimir una vez, por adelantado.** La configuración indica qué campos guardan documentos pesados, así que la compresión empieza al subirlos y el trabajo se hace una sola vez en lugar de en cada descarga.
+- **Sin compresiones duplicadas.** Si un asesor subía otro documento al mismo campo mientras una compresión seguía en curso, los archivos anteriores podían enviarse otra vez. Ahora cada carga se registra en Redis, que la API ya usaba, así que solo los archivos nuevos van al compresor, y el webhook limpia su estado cuando la Lambda termina.
 - **Un respaldo dentro de la descarga.** El modo al momento asegura que ningún paquete salga con un documento pesado que no se haya comprimido antes.
 
 ## Resultados

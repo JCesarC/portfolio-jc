@@ -4,7 +4,9 @@ summary: A dedicated compressor for mortgage PDFs of up to 200 MB that reduces t
 order: 3
 job: chiplo
 company: Chiplo / Docupass
-stack: [Node.js, TypeScript, AWS Lambda, S3]
+stack: [Node.js, TypeScript, AWS Lambda, S3, Redis]
+# TODO: measure the compressor on a real heavy PDF (e.g. a 150 MB deed) and record before/after size.
+# A measured example ("150 MB → 85 MB") would make a stronger card than "Up to 40%". Update es/ too.
 impact:
   - value: Up to 200 MB
     label: per document, such as deeds and condominium regimes
@@ -33,6 +35,7 @@ The compressor is one stage of a larger set of Lambda functions, each with a sin
 <Flow steps={['Auto-fill forms', 'Compress heavy PDFs', 'Merge documents', 'Package ZIP', 'Pre-signed S3 URL']} />
 
 - **Auto-fill** of lender forms with the applicant's data.
+- **Split when still required.** Some documents over 50 MB had to go to broker portals that accept 20 MB at most, so the pipeline splits them by page ranges, set in configuration, into parts that fit.
 - **Merge and package** the client's documents into a single ZIP.
 - **Secure delivery** through short-lived pre-signed S3 URLs, so nothing is exposed publicly.
 
@@ -41,6 +44,7 @@ The compressor is one stage of a larger set of Lambda functions, each with a sin
 - **A dedicated compressor for heavy files.** Instead of pushing the general compressor further, I built a separate service only for the documents that need it, leaving the rest of the pipeline unchanged.
 - **Legibility over maximum compression.** A smaller file is useless if a signature or a figure on a deed can no longer be read, so the settings favor quality and accept a less aggressive reduction.
 - **Compress once, ahead of time.** Configuration marks which fields hold heavy documents, so compression starts on upload and the work happens once instead of on every download.
+- **No double compression.** If an advisor uploaded another document to the same field while a compression was still running, the earlier files risked being sent again. Each upload is now registered in Redis, which the API already used, so only new files go to the compressor, and the webhook clears their state when the Lambda finishes.
 - **A fallback inside the download.** On-demand mode makes sure a package never goes out with a heavy file that was not compressed beforehand.
 
 ## Results

@@ -27,6 +27,7 @@
         "S3",
         "MongoDB",
         "PostgreSQL",
+        "Redis",
         "React",
         "Next.js",
         "GitHub Actions"
