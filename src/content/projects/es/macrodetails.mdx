@@ -1,0 +1,38 @@
+---
+title: MacroDetails
+summary: Un asistente de regalos con AI sobre un marketplace curado de artesanos locales, empezando en Campeche, México. Le dices para quién es el regalo, la ocasión y tu presupuesto, y te recomienda productos reales del catálogo y los programa para la fecha indicada.
+order: 1
+status: building
+stack: [Next.js, NestJS, TypeScript, MongoDB Atlas, Zod, AWS CDK]
+repo: https://github.com/JCesarC/macrodetails-app
+# TODO: agregar `demo:` (URL desplegada) y `video:` cuando la demo esté en línea; la etiqueta "Demo próximamente" desaparece sola.
+---
+
+## La idea
+
+Encontrar un detalle especial de artesanos locales (flores, postres, chocolates, arreglos personalizados) normalmente implica recorrer redes sociales y escribirle a cada vendedor. MacroDetails reúne a esos artesanos en un solo catálogo y pone un asistente al frente: describes a la persona y la ocasión, y te sugiere productos reales que encajan, te explica por qué y te ayuda a programar la entrega y a recordar la próxima fecha importante.
+
+## En qué va
+
+En desarrollo activo rumbo a una primera demo pública. Lo construido hasta ahora:
+
+- **Monorepo** con pnpm y Turborepo: una web en Next.js y una API en NestJS que comparten contratos en Zod, así que un cambio en la API que rompe la web falla al compilar y no en producción.
+- **Catálogo de productos**: módulos de catálogo, proveedores y almacenamiento en la API, la interfaz de la tienda y un seed de proveedores y productos de demo.
+- **Almacenamiento de imágenes**: un bucket privado de S3 detrás de CloudFront, definido y probado con AWS CDK.
+- **CI** con GitHub Actions, configuración de entorno validada y health checks.
+
+## Qué incluirá la demo
+
+- **Concierge de regalos**: un chat en streaming respaldado por un agente con herramientas para buscar en el catálogo, revisar la entrega, agregar al carrito y guardar destinatarios, que responde con tarjetas de producto que explican cada sugerencia.
+- **Búsqueda híbrida**, que combina búsqueda por texto y vectorial con Atlas Vector Search.
+- **Checkout** con Stripe en modo de prueba, un webhook idempotente y pedidos que avanzan por una máquina de estados.
+- **Panel de proveedor**: el proveedor sube una foto y un modelo de visión propone título, descripción, etiquetas y alérgenos para que el proveedor los apruebe.
+- **Evals en CI**, trazas del LLM y costo por conversación, rate limiting y un tope diario de gasto en AI.
+
+## Decisiones de arquitectura
+
+Cada decisión está documentada como un ADR en el repositorio.
+
+- **Un solo monorepo.** Una versión anterior vivía en dos repositorios, con los tipos de la API copiados a mano en el frontend. Ahora la web y la API comparten contratos, y un cambio que toca ambas va en un solo pull request.
+- **Un monolito modular, hexagonal dentro de cada módulo.** La API se divide primero por módulo de negocio (catálogo, pedidos, proveedores, AI) y después por capas. El dominio no sabe nada de MongoDB, NestJS ni Stripe, y los módulos solo se comunican por su API pública o por eventos de dominio. Los microservicios llegan después, solo donde se justifiquen.
+- **NestJS en lugar de Express cableado a mano.** Los módulos e inyección de dependencias integrados encajan con el monolito modular y eliminan el código repetido de conectar todo a mano.

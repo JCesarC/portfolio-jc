@@ -31,6 +31,7 @@ const links = [
     video={video}
     poster={poster}
     links={links}
+    soon={!demo && status === 'building' ? t('projects.soon') : undefined}
     back={{ href: `${localePath(locale, '/')}#projects`, label: t('project.back') }}
     next={
       next && {

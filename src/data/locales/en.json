@@ -90,6 +90,7 @@
     "projects.read": "Read more",
     "projects.repo": "Code",
     "projects.demo": "Live demo",
+    "projects.soon": "Demo coming soon",
     "projects.status.building": "In progress",
     "projects.status.live": "Live",
     "projects.status.archived": "Archived",

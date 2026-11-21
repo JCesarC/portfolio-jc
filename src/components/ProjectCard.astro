@@ -11,11 +11,20 @@ interface Props {
 const { entry, locale } = Astro.props;
 const t = useTranslations(locale);
 const href = localePath(locale, `/projects/${slugOf(entry)}/`);
-const { title, summary, impact, stack, status } = entry.data;
+const { title, summary, impact, stack, status, demo } = entry.data;
+const soon = !demo && status === 'building';
 ---
 
 <article class="group relative flex h-full flex-col rounded-2xl border border-(--color-line) bg-(--color-surface) p-6 transition-shadow hover:shadow-lg hover:shadow-black/5 sm:p-8">
-  <p class="eyebrow">{t(`projects.status.${status}`)}</p>
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <p class="eyebrow">{t(`projects.status.${status}`)}</p>
+    {soon && (
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-dashed border-(--color-line) px-2.5 py-0.5 text-xs text-(--color-muted)">
+        <span aria-hidden="true" class="size-1.5 rounded-full bg-(--color-accent)" />
+        {t('projects.soon')}
+      </span>
+    )}
+  </div>
   <h3 class="mt-3 font-serif text-2xl font-semibold tracking-tight">
     <a href={href} class="after:absolute after:inset-0 after:rounded-2xl">
       {title}

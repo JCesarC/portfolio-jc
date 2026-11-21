@@ -21,6 +21,8 @@ interface Props {
   video?: string;
   poster?: string;
   links?: Link[];
+  /** Placeholder shown next to the links while a demo is not deployed yet (e.g. "Demo coming soon"). */
+  soon?: string;
   /** Small disclaimer under the summary (e.g. company ownership of the product). */
   note?: string;
   back: Link;
@@ -39,6 +41,7 @@ const {
   video,
   poster,
   links = [],
+  soon,
   note,
   back,
   next,
@@ -67,7 +70,7 @@ const t = useTranslations(locale);
     </div>
     <p class="mt-6 text-lg leading-relaxed text-(--color-muted)">{summary}</p>
     {note && <p class="mt-3 text-xs text-(--color-muted)">{note}</p>}
-    {links.length > 0 && (
+    {(links.length > 0 || soon) && (
       <ul class="mt-6 flex flex-wrap gap-3">
         {links.map((l) => (
           <li>
@@ -79,6 +82,14 @@ const t = useTranslations(locale);
             </a>
           </li>
         ))}
+        {soon && (
+          <li>
+            <span class="inline-flex items-center gap-2 rounded-lg border border-dashed border-(--color-line) px-4 py-2 text-sm text-(--color-muted)">
+              <span aria-hidden="true" class="size-1.5 rounded-full motion-safe:animate-pulse bg-(--color-accent)" />
+              {soon}
+            </span>
+          </li>
+        )}
       </ul>
     )}
   </header>
