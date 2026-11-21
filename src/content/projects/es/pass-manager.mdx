@@ -1,0 +1,32 @@
+---
+title: Pass Manager
+summary: Una bóveda personal para contraseñas, notas y archivos, con campos personalizados en cada registro. Una API REST en Node.js y TypeScript construida con una arquitectura por capas, más un cliente en React.
+order: 2
+status: building
+stack: [TypeScript, Node.js, Express, MongoDB, React, AWS S3]
+# TODO: los repos (pass-manager, pass-manager-back) son privados. Agregar `repo:` si alguno se hace público, y `demo:` / `video:` al desplegar.
+---
+
+{/* TODO: agregar una sección de "Siguientes pasos" (p. ej. cifrado de los valores guardados, que aún no está en el código) cuando el plan esté claro. */}
+
+## La idea
+
+Un lugar para guardar las credenciales y notas privadas que terminan dispersas en archivos y chats. Cada registro vive en una bóveda y puede llevar más que una contraseña: etiquetas, favoritos, fecha de expiración, archivos adjuntos y campos extra definidos por el usuario.
+
+## En qué va
+
+Lo construido hasta ahora:
+
+- **Registros de bóveda** con etiquetas, favoritos, archivado, fechas de expiración, adjuntos y campos personalizados, cada uno con su propio tipo y valor.
+- **Notas** por usuario, con alta, edición, borrado y listado.
+- **Cuentas**: registro e inicio de sesión con contraseñas hasheadas y JWT, más las primeras piezas de roles y módulos para permisos.
+- **Carga de archivos** a Amazon S3.
+- **Documentación de la API** generada desde el código con OpenAPI (tsoa), así la documentación nunca se desfasa de las rutas.
+- **Cliente en React** con Material UI y Redux Toolkit: landing, inicio de sesión, la vista principal de la bóveda, perfil y configuración.
+
+## Decisiones de arquitectura
+
+- **Capas por responsabilidad.** La API se divide en dominio, aplicación (una clase por caso de uso), infraestructura y presentación. MongoDB, S3 y Express viven en los bordes, así que las reglas de negocio no dependen de ellos.
+- **Repositorios detrás de interfaces.** Cada entidad tiene una interfaz de repositorio en el dominio y una implementación en MongoDB sobre un repositorio base compartido, que concentra las consultas comunes en un solo lugar.
+- **Inyección de dependencias con un contenedor.** Los casos de uso, repositorios y servicios se conectan con Inversify en lugar de crearse a mano, lo que facilita reemplazarlos en las pruebas.
+- **Validación en la frontera.** Los cuerpos de las peticiones se validan con Joi antes de llegar a un caso de uso.

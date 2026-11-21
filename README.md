@@ -46,7 +46,6 @@ locale is missing a key, a job, a skill group, an education entry or a case-stud
 ## Content workflow
 
 - `<Todo>…</Todo>` in MDX renders only in `npm run dev`; production builds drop it. Run `npm run todos` before publishing.
-- A case study with `period: TODO` hides the period in production.
 - Set `draft: true` in a case study's frontmatter to keep it out of production.
 
 ## Environment

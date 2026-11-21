@@ -1,51 +1,55 @@
 ---
 title: Editor de plantillas versionado para solicitudes hipotecarias
-summary: Una herramienta interna que permite al equipo remapear campos de los formatos de cada banco y publicar cambios en minutos, con rollback a cualquier versión anterior.
+summary: Un editor visual, integrado en Docupass y usado principalmente para los formatos de Chiplo, que reemplazó los mapeos escritos a mano en JSON. El equipo coloca los campos sobre el PDF del banco, previsualiza el resultado real y publica una nueva versión en minutos, sin perder ninguna versión anterior.
 order: 2
 job: chiplo
-company: Chiplo
-role: Único ingeniero — diseño e implementación
-period: TODO
+company: Chiplo / Docupass
 stack: [React, Node.js, MongoDB, AWS S3]
 impact:
   - value: Minutos
     label: para publicar un cambio, antes hasta un día completo
   - value: 10+ / 5
     label: plantillas de 5 bancos
+  - value: '0'
+    label: ediciones manuales de JSON o rutas de S3 para publicar un formato
 ---
 
 ## Contexto
 
-Cada banco tiene sus propios formatos de solicitud hipotecaria, y cambian. Mapear los datos de la solicitud a esos formatos era trabajo manual que podía tomar hasta un día por cambio.
+Cada banco pide su propio formato de solicitud hipotecaria, además de formatos oficiales extra según a dónde se ingrese el expediente (Cofinavit, entre otros). Un pipeline de generación de PDFs llenaba esos formatos con los datos del expediente del cliente, usando plantillas en JSON mapeadas a mano.
+
+Para cada campo había que definir su posición en la página, su tipo, el nombre con el que se busca su valor y cómo se dibuja: texto plano, texto espaciado carácter por carácter, grupos de radio, casillas y más. El PDF base también se subía a mano a una carpeta específica de S3 y se referenciaba desde la plantilla. Un solo cambio de formato podía tomar hasta un día completo.
 
 ## Qué construí
 
-Un editor de plantillas donde el equipo remapea los campos de un formato y publica la nueva versión por su cuenta:
+Un asistente dentro de Docupass, la plataforma documental de la empresa, usado principalmente para mantener los formatos hipotecarios de Chiplo. El equipo elige una compañía, luego uno de sus formatos, y trabaja en un panel con tres pestañas:
 
 <Flow
   steps={[
-    'Subir formato del banco',
-    'Mapear campos',
-    'Publicar versión',
-    'Documentos autollenados',
-    'Rollback si hace falta',
+    'Elegir un formato',
+    'Subir nuevo PDF como borrador',
+    'Colocar y configurar campos',
+    'Sellar la versión',
+    'Previsualizar el PDF real',
+    'Elegir la versión en producción',
   ]}
 />
 
-- **Versionado por defecto.** Cada publicación crea una versión inmutable, así que cualquier versión anterior se puede restaurar con seguridad.
-- **Publicación autoservicio.** El equipo remapea campos y publica desde el editor (React, Node.js, MongoDB, S3).
+- **Información del documento.** Muestra el PDF con su nombre, número de campos y otros detalles. Subir aquí un PDF nuevo inicia una versión borrador, lo que reemplaza la carga manual a S3 y su referencia, sin tocar producción.
+- **Edición de campos.** El PDF con todos los campos de la versión seleccionada colocados encima, y un panel lateral para buscar campos por nombre o etiqueta, ver cuáles ya existen en la página o en todo el documento, y configurar cada uno: texto plano o espaciado, grupos de radio, casillas, límites de longitud, texto que se reduce para que valores largos quepan en espacios cortos, y más.
+- **Controles de edición.** Dentro de la edición de campos: deshacer y rehacer, navegación entre páginas, renombrar la versión y guardarla, para que trabajar en un formato largo se sienta como usar cualquier editor conocido.
+- **Vista previa.** Se elige cualquier versión, incluso un borrador, y un set de datos de prueba (solicitante solo, con coacreditado, con cónyuge y más) para ejecutar la Lambda real de generación de PDFs y revisar el PDF llenado ahí mismo.
 
 ## Decisiones clave
 
-<Todo>
-  Confirma cómo se reparte el almacenamiento entre MongoDB y S3. Por qué versiones inmutables en lugar de editar en
-  sitio; cómo los documentos ya generados siguen apuntando a la versión que usaron; cómo evitaste que un mapeo
-  incorrecto llegara a producción (vista previa, validación).
-</Todo>
+- **Versiones en su propia colección, selladas al guardar.** En lugar de editar las plantillas directamente, las versiones viven en una nueva colección de MongoDB. Guardar una versión la sella: ya no se puede editar, solo usar como punto de partida para una nueva. Una versión en producción nunca cambia por debajo.
+- **Producción usa una versión elegida explícitamente.** El editor lista todas las versiones de un formato y permite elegir cuál usa producción, así que regresar a una anterior es solo seleccionarla. Las plantillas creadas antes del versionado quedaron registradas como su versión original, así que todos los formatos funcionaron en el editor desde el primer día.
+- **Nunca perder trabajo.** Cada plantilla tiene un borrador que se guarda solo después de cada cambio a un campo. Si se cae la conexión o se cierra la pestaña, el borrador queda justo donde el usuario lo dejó.
+- **Probar con escenarios reales de solicitante.** Un formato se llena distinto según el solicitante: solo, con coacreditado, con cónyuge. La vista previa ejecuta la misma Lambda que llena los PDFs en producción con un set de datos para cada escenario, así que el equipo puede revisar una versión con los casos que importan para ese formato.
 
 ## Resultados
 
-- Los cambios a formatos salen en **minutos en lugar de hasta un día** de trabajo manual.
+- **Minutos en lugar de hasta un día completo** para cambiar y publicar un formato.
 - **10+ plantillas de 5 bancos** administradas en un solo lugar.
-
-<Todo>Algo más medible: cambios por mes, errores evitados.</Todo>
+- **Sin editar JSON ni rutas de S3 a mano.** Posiciones, tipos de campo, opciones de dibujo y el PDF base se manejan desde el editor.
+- **Cambios a producción más seguros.** Producción solo cambia cuando alguien selecciona una versión sellada, y cualquier versión anterior está a una selección de distancia.

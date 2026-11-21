@@ -1,0 +1,32 @@
+---
+title: Pass Manager
+summary: A personal vault for passwords, notes and files, with custom fields for each entry. A REST API in Node.js and TypeScript built with a layered architecture, plus a React client.
+order: 2
+status: building
+stack: [TypeScript, Node.js, Express, MongoDB, React, AWS S3]
+# TODO: the repos (pass-manager, pass-manager-back) are private. Add `repo:` if one becomes public, and `demo:` / `video:` once deployed.
+---
+
+{/* TODO: add a "What's next" section (e.g. encryption of stored values, which is not in the code yet) once the plan is clear. */}
+
+## The idea
+
+A place to keep the credentials and private notes that end up scattered across files and chats. Each entry lives in a vault and can carry more than a password: tags, favorites, an expiration date, attachments and extra fields defined by the user.
+
+## Where it stands
+
+Built so far:
+
+- **Vault entries** with tags, favorites, archiving, expiration dates, attachments and custom fields, each with its own type and value.
+- **Notes** per user, with create, edit, delete and listing.
+- **Accounts**: registration and login with hashed passwords and JWT, plus the first pieces of roles and modules for permissions.
+- **File uploads** to Amazon S3.
+- **API documentation** generated from the code with OpenAPI (tsoa), so the docs never drift from the routes.
+- **React client** with Material UI and Redux Toolkit: landing page, sign-in, the main vault view, profile and settings.
+
+## Architecture decisions
+
+- **Layers by responsibility.** The API is split into domain, application (one class per use case), infrastructure and presentation. MongoDB, S3 and Express live at the edges, so the business rules do not depend on them.
+- **Repositories behind interfaces.** Each entity has a repository interface in the domain and a MongoDB implementation built on a shared base repository, which keeps common queries in one place.
+- **Dependency injection with a container.** Use cases, repositories and services are wired through Inversify instead of being created by hand, which keeps them easy to replace in tests.
+- **Validation at the boundary.** Request bodies are validated with Joi before they reach a use case.

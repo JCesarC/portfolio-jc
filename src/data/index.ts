@@ -51,7 +51,9 @@ const localeSchema = z.object({
   profile: z.object({
     title: z.string(),
     location: z.string(),
-    /** Short first-person pitch for the hero and meta description. */
+    /** Short professional pitch: meta description and social previews. */
+    description: z.string(),
+    /** Friendly welcome shown in the hero. */
     intro: z.string(),
     /** Longer CV summary. */
     summary: z.string(),

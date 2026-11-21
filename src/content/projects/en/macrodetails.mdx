@@ -1,0 +1,38 @@
+---
+title: MacroDetails
+summary: An AI gift assistant on a curated marketplace of local artisans, starting in Campeche, Mexico. You say who the gift is for, the occasion and your budget, and it recommends real products from the catalog and schedules them for the right date.
+order: 1
+status: building
+stack: [Next.js, NestJS, TypeScript, MongoDB Atlas, Zod, AWS CDK]
+repo: https://github.com/JCesarC/macrodetails-app
+# TODO: add `demo:` (deployed URL) and `video:` once the demo is live; the "Demo coming soon" label then disappears.
+---
+
+## The idea
+
+Finding a meaningful gift from local makers (flowers, desserts, chocolates, custom arrangements) usually means scrolling through social media and messaging each seller. MacroDetails brings those artisans into one catalog and puts an assistant in front of it: you describe the person and the occasion, and it suggests real products that fit, explains why, and helps you schedule the delivery and remember the next important date.
+
+## Where it stands
+
+In active development toward a first public demo. Built so far:
+
+- **Monorepo** with pnpm and Turborepo: a Next.js web app and a NestJS API that share Zod contracts, so an API change that breaks the web app fails at compile time instead of in production.
+- **Product catalog**: API modules for catalog, vendors and storage, the storefront UI, and a seed of demo vendors and products.
+- **Image storage**: a private S3 bucket behind CloudFront, defined and tested with AWS CDK.
+- **CI** with GitHub Actions, validated environment configuration and health checks.
+
+## What the demo will include
+
+- **Gift concierge**: a streaming chat backed by an agent with tools to search the catalog, check delivery, add to cart and save recipients, answering with product cards that explain each pick.
+- **Hybrid search**, combining text and vector search with Atlas Vector Search.
+- **Checkout** with Stripe in test mode, an idempotent webhook and orders tracked through a state machine.
+- **Vendor panel**: a vendor uploads a photo and a vision model proposes the title, description, tags and allergens for the vendor to approve.
+- **Evals in CI**, LLM tracing and cost per conversation, rate limiting and a daily AI spending cap.
+
+## Architecture decisions
+
+Each decision is written down as an ADR in the repository.
+
+- **One monorepo.** An earlier version lived in two repositories, with API types copied by hand into the frontend. Now web and API share contracts and a change that touches both ships in one pull request.
+- **A modular monolith, hexagonal inside each module.** The API is split first by business module (catalog, orders, vendors, AI) and then by layers. The domain knows nothing about MongoDB, NestJS or Stripe, and modules only talk through their public API or domain events. Microservices come later, only where they are justified.
+- **NestJS over hand-wired Express.** Built-in modules and dependency injection fit the modular monolith and remove the boilerplate of wiring everything by hand.

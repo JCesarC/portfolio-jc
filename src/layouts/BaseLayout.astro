@@ -16,7 +16,7 @@ interface Props {
 
 const { locale, title, description: desc } = Astro.props;
 const { profile } = content(locale);
-const description = desc ?? profile.intro;
+const description = desc ?? profile.description;
 const t = useTranslations(locale);
 const pageTitle = title ? `${title} · ${site.shortName}` : `${site.shortName} — ${profile.title}`;
 const neutralPath = stripLocale(Astro.url.pathname);

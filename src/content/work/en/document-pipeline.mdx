@@ -1,40 +1,54 @@
 ---
-title: Serverless document pipeline for mortgage files
-summary: AWS Lambda services that fill, compress, merge and package sensitive mortgage documents into secure downloads.
+title: PDF compression for heavy mortgage documents
+summary: A dedicated compressor for mortgage PDFs of up to 200 MB that reduces their size while keeping text, logos and signatures legible, built into the serverless pipeline that prepares client file downloads.
 order: 3
 job: chiplo
 company: Chiplo / Docupass
-role: Sole engineer — built and operated in production
-period: TODO
-stack: [Node.js, TypeScript, AWS Lambda, S3]
+stack: [Node.js, TypeScript, AWS Lambda, S3, Redis]
+# TODO: measure the compressor on a real heavy PDF (e.g. a 150 MB deed) and record before/after size.
+# A measured example ("150 MB → 85 MB") would make a stronger card than "Up to 40%". Update es/ too.
 impact:
-  - value: '−40%'
-    label: PDF file size with the custom compressor
-  - value: Pre-signed
-    label: S3 URLs, so files are never public
+  - value: Up to 200 MB
+    label: per document, such as deeds and condominium regimes
+  - value: Up to 40%
+    label: smaller, with text, logos and signatures kept legible
+  - value: 2 modes
+    label: in the background on upload, or on demand during a download
 ---
 
 ## Context
 
-A mortgage file is a bundle of filled forms, IDs, statements and signed documents. Advisors need to download the complete, lender-ready package, and those files contain sensitive financial data.
+Some documents in a mortgage file are very large. Condominium regimes, deeds and similar scans often weigh 130 to 150 MB, and sometimes up to 200 MB. To upload them, advisors usually split them first with an online PDF tool, and even then the pieces could still weigh 85 MB or over 100 MB.
+
+When an advisor downloaded a client's file, every document kept that weight. The pipeline already had a compression step, based on Ghostscript running in JavaScript, but it barely reduced these files.
 
 ## What I built
 
-A set of Lambda functions that each do one job, chained into a pipeline:
+A compression service dedicated to heavy PDFs, separate from the general pipeline and focused only on that problem:
 
-<Flow steps={['Auto-fill forms', 'Compress PDFs', 'Merge documents', 'Package ZIP', 'Pre-signed S3 URL']} />
+- **Tuned for legibility, not just size.** Compression is tuned to keep text, logos and signatures sharp, because every page still has to be read by the lender. The goal is a meaningful reduction, not the smallest possible file.
+- **Background mode.** When a document is uploaded to a field configured as heavy, such as a deed or a condominium regime, the backend starts the compressor Lambda. It runs in the background and, when it finishes, calls a webhook that saves the S3 path of the compressed file.
+- **On-demand mode.** If a download includes a heavy document that has not been compressed yet, the download pipeline runs the compressor right then, waits for the result and puts the compressed file in the package.
 
-- **Auto-fill** of mortgage forms with the applicant’s data.
-- **Compression** reduces PDF size by up to 40%.
-- **Secure delivery** through short-lived pre-signed S3 URLs; nothing is exposed publicly.
+The compressor is one stage of a larger set of Lambda functions, each with a single job, that build the downloadable file:
+
+<Flow steps={['Auto-fill forms', 'Compress heavy PDFs', 'Merge documents', 'Package ZIP', 'Pre-signed S3 URL']} />
+
+- **Auto-fill** of lender forms with the applicant's data.
+- **Split when still required.** Some documents over 50 MB had to go to broker portals that accept 20 MB at most, so the pipeline splits them by page ranges, set in configuration, into parts that fit.
+- **Merge and package** the client's documents into a single ZIP.
+- **Secure delivery** through short-lived pre-signed S3 URLs, so nothing is exposed publicly.
 
 ## Key decisions
 
-<Todo>
-  Does auto-fill use the template editor versions? If so, link it here. Why Lambda (cost, spiky load), how you handled
-  timeouts/memory on large files, how failures were retried and reported (error notifications).
-</Todo>
+- **A dedicated compressor for heavy files.** Instead of pushing the general compressor further, I built a separate service only for the documents that need it, leaving the rest of the pipeline unchanged.
+- **Legibility over maximum compression.** A smaller file is useless if a signature or a figure on a deed can no longer be read, so the settings favor quality and accept a less aggressive reduction.
+- **Compress once, ahead of time.** Configuration marks which fields hold heavy documents, so compression starts on upload and the work happens once instead of on every download.
+- **No double compression.** If an advisor uploaded another document to the same field while a compression was still running, the earlier files risked being sent again. Each upload is now registered in Redis, which the API already used, so only new files go to the compressor, and the webhook clears their state when the Lambda finishes.
+- **A fallback inside the download.** On-demand mode makes sure a package never goes out with a heavy file that was not compressed beforehand.
 
 ## Results
 
-<Todo>Volume of packages generated, time per package, incidents or cost.</Todo>
+- **Heavy documents up to 40% smaller**, with text, logos and signatures still legible and results comparable to the online tools advisors already used.
+- **Lighter client file downloads.** Packages that include deeds or condominium regimes use the compressed versions instead of the original files.
+- **No extra step for the team.** Compression runs automatically, driven by field configuration, both on upload and during downloads.

@@ -25,14 +25,13 @@ const links = [
     eyebrow={t('project.eyebrow')}
     title={title}
     summary={summary}
-    meta={[
-      { label: t('case.status'), text: t(`projects.status.${status}`) },
-      { label: t('case.stack'), tags: stack },
-    ]}
+    stack={stack}
+    status={t(`projects.status.${status}`)}
     impact={impact}
     video={video}
     poster={poster}
     links={links}
+    soon={!demo && status === 'building' ? t('projects.soon') : undefined}
     back={{ href: `${localePath(locale, '/')}#projects`, label: t('project.back') }}
     next={
       next && {

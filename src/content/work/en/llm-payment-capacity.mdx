@@ -4,21 +4,19 @@ summary: Turning uploaded bank statements into an explainable estimate of how mu
 order: 1
 job: chiplo
 company: Chiplo
-role: Sole engineer — design, implementation and production support
-period: TODO
 stack: [Python, GPT-4, AWS Lambda, Next.js]
 impact:
+  - value: 1h+ → min
+    label: per assessment (estimated, not formally measured)
   - value: '40%'
     label: max debt-to-income ratio used for the estimate
-  - value: Prod
-    label: shipped to real mortgage applicants
+  - value: '100%'
+    label: of Chiplo applicant files showed the assessment automatically
 ---
 
 ## Context
 
-Chiplo helps real-estate agents and brokers originate mortgages. Before a file reaches a lender, an advisor has to estimate whether the applicant can afford the payment based on their bank statements.
-
-<Todo>How long did a manual review take, and how many applications per month went through this step?</Todo>
+Chiplo helps real-estate agents and brokers originate mortgages. Before a file reaches a lender, an advisor has to estimate whether the applicant can afford the payment. Done by hand, that meant reading through the applicant's bank statements, asking about their income and running the numbers: an hour or more per applicant.
 
 ## What I built
 
@@ -42,12 +40,11 @@ A pipeline that reads the applicant's uploaded bank statements and produces a pa
 
 ## Key decisions
 
-<Todo>
-  Two or three trade-offs: which steps are deterministic code vs. model output, why GPT-4 and not rules/OCR alone, how
-  you validated accuracy (sample of reviewed files, agreement with advisors), how you handled PII and model failures,
-  cost per assessment.
-</Todo>
+- **Automate the advisors' criteria, not new ones.** The policies the pipeline applies, from how income is reviewed to how payment capacity is calculated, are the same ones advisors used in their manual reviews. The result can be checked against what an advisor would have done by hand.
+- **Every figure comes from the applicant's own statements.** The estimate is built only from the uploaded bank statements, and anomalous deposits are excluded so a one-off deposit cannot inflate it.
+- **A number alone is not enough.** Each assessment ships with the reasoning behind it, shown in the Next.js app, so the advisor can see how the figure was reached before relying on it.
 
 ## Results
 
-<Todo>Time saved per application, number of assessments in production, accuracy vs. manual review.</Todo>
+- **From an hour or more to minutes.** With the pipeline, a review that took an advisor an hour or more produced an estimate, with its reasoning, in minutes. This was not formally measured at the time; it is my estimate of the before and after.
+- **Built into every applicant file.** The assessment ran on every applicant file in Chiplo, so advisors saw the applicant's payment capacity and its reasoning with no manual step.
