@@ -1,50 +1,55 @@
 ---
 title: Versioned template editor for mortgage forms
-summary: An internal tool that lets the team remap lender form fields and publish changes in minutes, with rollback to any earlier version.
+summary: A visual editor, built into Docupass and used mainly for Chiplo's lender forms, that replaced hand-written JSON mappings. The team places fields on the lender's PDF, previews the real output and publishes a new version in minutes, with every earlier version still available.
 order: 2
 job: chiplo
-company: Chiplo
-role: Sole engineer
+company: Chiplo / Docupass
 stack: [React, Node.js, MongoDB, AWS S3]
 impact:
   - value: Minutes
     label: to publish a form change, down from up to a full day
   - value: 10+ / 5
     label: templates across 5 lenders
+  - value: '0'
+    label: hand-edited JSON or S3 paths to publish a form
 ---
 
 ## Context
 
-Each lender has its own mortgage application forms, and they change. Mapping application data into those forms was manual work that could take up to a full day per change.
+Each lender requires its own mortgage application form, plus extra official formats depending on where the file is submitted (Cofinavit, among others). A PDF-generation pipeline filled those forms with data from the applicant's file, using JSON templates mapped by hand.
+
+For every field, someone had to define its position on the page, its type, the name used to look up its value, and how to render it: plain text, character-spaced text, a radio group, checkboxes and more. The base PDF also had to be uploaded manually to a specific S3 folder and referenced from the template. A single form change could take up to a full day.
 
 ## What I built
 
-A template editor where the team remaps data fields on a form and publishes the new version themselves:
+A wizard inside Docupass, the company's document platform, used mainly to maintain Chiplo's mortgage forms. The team picks a company, then one of its forms, and works in a panel with three tabs:
 
 <Flow
   steps={[
-    'Upload lender form',
-    'Map data fields',
-    'Publish new version',
-    'Documents auto-filled',
-    'Roll back if needed',
+    'Pick a form',
+    'Upload new PDF as a draft',
+    'Place and configure fields',
+    'Seal the version',
+    'Preview the real PDF',
+    'Choose the production version',
   ]}
 />
 
-- **Versioning by default.** Every publish creates a new immutable version, so any earlier version can be restored safely.
-- **Self-service publishing.** The team remaps fields and publishes from the editor (React, Node.js, MongoDB, S3).
+- **Document info.** Shows the PDF with its name, field count and other details. Uploading a new PDF here starts a draft version, replacing the manual S3 upload-and-reference step without touching production.
+- **Field editor.** The PDF with every field of the selected version placed on it, and a sidebar to search fields by name or label, see which ones already exist on the page or in the whole document, and configure each one: plain or character-spaced text, radio groups, checkboxes, length limits, text that shrinks to fit long values in short spaces, and more.
+- **Editing controls.** Inside the field editor: undo and redo, page navigation, renaming the version and saving it, so working on a long form feels like using any familiar editor.
+- **Preview.** Pick any version, even a draft, and a test data set (single applicant, with co-borrower, with spouse and more) to run the real PDF-generation Lambda and review the filled PDF right there.
 
 ## Key decisions
 
-<Todo>
-  Confirm how storage is split between MongoDB and S3. Why immutable versions instead of edits in place; how documents
-  already generated keep pointing to the version they used; how you prevented a bad mapping from reaching production
-  (preview, validation).
-</Todo>
+- **Versions in their own collection, sealed on save.** Instead of editing templates in place, versions live in a new MongoDB collection. Saving a version seals it: it can no longer be edited, only used as the starting point for a new one. A version used in production never changes under it.
+- **Production uses a version chosen explicitly.** The editor lists every version of a form and lets the team pick the one production uses, so going back is just selecting an earlier version. Templates created before versioning existed were registered as their original version, so every form worked in the editor from day one.
+- **Never lose work.** Each template has one draft, saved automatically after every field change. If the connection drops or the tab closes, the draft is exactly where the user left it.
+- **Test against real applicant scenarios.** A form fills differently depending on the applicant: alone, with a co-borrower, with a spouse. The preview runs the same Lambda that fills production PDFs with a data set for each scenario, so the team can check a version against the cases that matter for that form.
 
 ## Results
 
-- Form changes go live in **minutes instead of up to a full day** of manual work.
+- **Minutes instead of up to a full day** to change and publish a form.
 - **10+ templates across 5 lenders** managed in one place.
-
-<Todo>Anything else measurable: number of changes per month, errors avoided.</Todo>
+- **No hand-edited JSON or S3 paths.** Positions, field types, rendering options and the base PDF are all handled from the editor.
+- **Safer production changes.** Production only switches when someone selects a sealed version, and any earlier version is one selection away.

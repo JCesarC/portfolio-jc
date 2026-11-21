@@ -25,10 +25,8 @@ const links = [
     eyebrow={t('project.eyebrow')}
     title={title}
     summary={summary}
-    meta={[
-      { label: t('case.status'), text: t(`projects.status.${status}`) },
-      { label: t('case.stack'), tags: stack },
-    ]}
+    stack={stack}
+    status={t(`projects.status.${status}`)}
     impact={impact}
     video={video}
     poster={poster}

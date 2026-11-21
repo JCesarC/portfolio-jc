@@ -1,48 +1,58 @@
 ---
-title: Pipeline serverless de documentos hipotecarios
-summary: Servicios en AWS Lambda que llenan, comprimen, combinan y empaquetan documentos hipotecarios sensibles en descargas seguras.
+title: Compresión de PDFs pesados para expedientes hipotecarios
+summary: Un compresor dedicado para PDFs hipotecarios de hasta 200 MB que reduce su peso sin perder la legibilidad de textos, logos y firmas, integrado en el pipeline serverless que prepara las descargas de expedientes.
 order: 3
 job: chiplo
 company: Chiplo / Docupass
-role: Único ingeniero
 stack: [Node.js, TypeScript, AWS Lambda, S3]
 impact:
-  - value: '−40%'
-    label: tamaño de PDFs con el compresor propio
-  - value: Prefirmadas
-    label: URLs de S3, los archivos nunca son públicos
+  - value: Hasta 200 MB
+    label: por documento, como escrituras y regímenes de condominio
+  - value: Hasta 40%
+    label: menos peso, con textos, logos y firmas legibles
+  - value: 2 modos
+    label: en segundo plano al subir, o al momento durante una descarga
 ---
 
 ## Contexto
 
-Un expediente hipotecario es un paquete de formatos llenos, identificaciones, estados de cuenta y documentos firmados. Los asesores necesitan descargar el paquete completo listo para el banco, y esos archivos contienen datos financieros sensibles.
+Algunos documentos de un expediente hipotecario son muy pesados. Regímenes de condominio, escrituras y escaneos similares suelen pesar entre 130 y 150 MB, y en ocasiones hasta 200 MB. Para subirlos, los asesores normalmente los dividían antes con una herramienta de PDFs en línea, y aun así las partes podían quedar en 85 MB o más de 100 MB.
+
+Al descargar el expediente de un cliente, cada documento conservaba ese peso. El pipeline ya tenía un paso de compresión, basado en Ghostscript ejecutado en JavaScript, pero apenas reducía estos archivos.
 
 ## Qué construí
 
-Un conjunto de funciones Lambda, cada una con una sola responsabilidad, encadenadas en un pipeline:
+Un servicio de compresión dedicado a PDFs pesados, separado del pipeline general y enfocado solo en ese problema:
+
+- **Afinado para la legibilidad, no solo para el peso.** La compresión está ajustada para mantener nítidos textos, logos y firmas, porque el banco tiene que poder leer cada página. El objetivo es una reducción significativa, no el archivo más pequeño posible.
+- **Modo en segundo plano.** Cuando se sube un documento a un campo configurado como pesado, como una escritura o un régimen de condominio, el backend ejecuta la Lambda de compresión. Corre en segundo plano y, al terminar, llama a un webhook que guarda la ruta en S3 del archivo comprimido.
+- **Modo al momento.** Si una descarga incluye un documento pesado que todavía no se ha comprimido, el pipeline de descarga ejecuta el compresor en ese momento, espera el resultado y agrega el archivo comprimido al paquete.
+
+El compresor es una etapa de un conjunto más grande de funciones Lambda, cada una con una sola responsabilidad, que arman el expediente descargable:
 
 <Flow
   steps={[
     'Autollenado de formatos',
-    'Compresión de PDFs',
+    'Compresión de PDFs pesados',
     'Combinar documentos',
     'Empaquetar ZIP',
     'URL prefirmada de S3',
   ]}
 />
 
-- **Autollenado** de formatos hipotecarios con los datos del solicitante.
-- **Compresión** que reduce los PDFs hasta un 40%.
+- **Autollenado** de los formatos de cada banco con los datos del solicitante.
+- **Combinar y empaquetar** los documentos del cliente en un solo ZIP.
 - **Entrega segura** mediante URLs prefirmadas de S3 de corta duración; nada queda expuesto públicamente.
 
 ## Decisiones clave
 
-<Todo>
-  ¿El autollenado usa las versiones del editor de plantillas? Si sí, enlázalo aquí. Por qué Lambda (costo, carga
-  variable), cómo manejaste timeouts/memoria con archivos grandes, cómo se reintentaban y reportaban las fallas
-  (notificaciones de error).
-</Todo>
+- **Un compresor dedicado a archivos pesados.** En lugar de forzar más el compresor general, construí un servicio aparte solo para los documentos que lo necesitan, sin cambiar el resto del pipeline.
+- **Legibilidad antes que compresión máxima.** Un archivo más ligero no sirve si ya no se puede leer una firma o una cifra de una escritura, así que la configuración prioriza la calidad y acepta una reducción menos agresiva.
+- **Comprimir una vez, por adelantado.** La configuración indica qué campos guardan documentos pesados, así que la compresión empieza al subirlos y el trabajo se hace una sola vez en lugar de en cada descarga.
+- **Un respaldo dentro de la descarga.** El modo al momento asegura que ningún paquete salga con un documento pesado que no se haya comprimido antes.
 
 ## Resultados
 
-<Todo>Volumen de paquetes generados, tiempo por paquete, incidentes o costo.</Todo>
+- **Documentos pesados hasta 40% más ligeros**, con textos, logos y firmas legibles y resultados comparables a las herramientas en línea que los asesores ya usaban.
+- **Descargas de expedientes más ligeras.** Los paquetes que incluyen escrituras o regímenes de condominio usan las versiones comprimidas en lugar de los archivos originales.
+- **Sin pasos extra para el equipo.** La compresión corre automáticamente, según la configuración de cada campo, tanto al subir documentos como al descargar expedientes.
